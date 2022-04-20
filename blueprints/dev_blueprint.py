@@ -1,6 +1,7 @@
 import json
-
 from flask import Blueprint, render_template, request
+from mongo_handler import insert_user
+
 
 dev_blueprint = Blueprint('dev_blueprint', __name__)
 
@@ -12,9 +13,10 @@ def index():
 
 @dev_blueprint.post('/add_api_user')
 def sign_up():
+    # Data collected from the html form
     name = request.form['fullname']
-    admin = request.form['admin']
-    api_key = {
-        'access_key': 123
-    }
-    return json.dumps(api_key)
+    admin = int(request.form['admin'])
+
+    # returns the api_key string that is also stored in the database
+    api_key = insert_user({'name': name, 'admin': admin})
+    return json.dumps({'api_key': api_key})

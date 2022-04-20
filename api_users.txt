@@ -1,0 +1,3 @@
+{'user_data': 'Arne', 'admin': 0, 'api_key': '0WLDMV15JEE8Z7R'}
+{'user_data': 'Adam', 'admin': 1, 'api_key': 'LAGJZGOFMQPEMHA'}
+{'user_data': 'Kalle', 'admin': 1, 'api_key': 'USU9ZIVNK91B19D'}
