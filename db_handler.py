@@ -55,13 +55,18 @@ def get_user_drinks(user):
     Function to get all drinks that belong to a specific user
     :return: If any, drinks as objects
     """
-    return Drinks.query.filter_by(user_id=user.id)
+    return Drinks.query.filter_by(user_id=user.id).first()
 
 
-def access_to_modify(api_key, drink):
+def access_to_modify(api_key):
     """
+    Function that return a boolean if there is a drink in the database that they have created
     :param api_key, drink_name
-    :return: True if user has access to modify
+    :return: True
     """
     user = get_user_by_key(api_key)
-    drinks = get_all_drinks()
+    drink = get_user_drinks(user)
+    if drink:
+        return True
+    else:
+        return False

@@ -40,16 +40,24 @@ def authorize_modify_db(f):
         data = request.args
         key = data['api_key']
         # Can be changed depending on what the request looks like
-        drink = data['drink_name']
-
-        if not access_to_modify(key, drink):
+        if not access_to_modify(key):
             response = {
-                'Result': "The drink"
+                'Result': "No drink to modify"
             }
             return Response(json.dumps(response), 401, content_type='application/json')
         return f(*args, **kwargs)
 
     return wrapper
+
+
+@api_blueprint.post('/api/v1/drink/modify')
+@authorize_modify_db
+def delete_drink():
+    data = request.args
+    # Drink that is passed in the query string
+    drink_name = data['drink']
+
+    return Response("'Status':'You have deleted'", 200, content_type='application/json')
 
 
 @api_blueprint.get('/api/v1/drink/')
