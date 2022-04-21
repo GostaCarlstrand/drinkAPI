@@ -2,13 +2,18 @@ import json
 from functools import wraps
 from flask import Blueprint, render_template, request, Response
 
-from db_handler import confirm_api_key
+from db_handler import confirm_api_key, access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
 
 
-# Add this as a decorator to check that the request has a valid API-key
+
 def authorize_api_key(f):
+    """
+    A decorator to check that the request has a valid API-key
+    :param f:
+    :return: wrapper function
+    """
     @wraps(f)
     def wrapper(*args, **kwargs):
         # Extracted from the params in the api request
@@ -19,6 +24,31 @@ def authorize_api_key(f):
             }
             return Response(json.dumps(response), 401, content_type='application/json')
         return f(*args, **kwargs)
+    return wrapper
+
+
+def authorize_modify_db(f):
+    """
+    A decorator to check that the user has access to modify the drink
+    :param f:
+    :return: wrapper function
+    """
+
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        # Extracted from the params in the api request
+        data = request.args
+        key = data['api_key']
+        # Can be changed depending on what the request looks like
+        drink = data['drink_name']
+
+        if not access_to_modify(key, drink):
+            response = {
+                'Result': "The drink"
+            }
+            return Response(json.dumps(response), 401, content_type='application/json')
+        return f(*args, **kwargs)
+
     return wrapper
 
 

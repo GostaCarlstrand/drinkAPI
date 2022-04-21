@@ -1,7 +1,7 @@
 import string
 import random
 
-from models import User
+from models import User, Drinks
 from app import db
 
 
@@ -33,3 +33,35 @@ def confirm_api_key(user_key):
         return False
 
 
+def get_user_by_key(api_key):
+    """
+    A function that finds the user to which the provided api key belongs to
+    :param api_key:
+    :return: User object from database
+    """
+    return User.query.filter_by(api_key=api_key).first()
+
+
+def get_all_drinks():
+    """
+    Function to get all drinks from the database
+    :return: Drinks as objects
+    """
+    return Drinks.query.all()
+
+
+def get_user_drinks(user):
+    """
+    Function to get all drinks that belong to a specific user
+    :return: If any, drinks as objects
+    """
+    return Drinks.query.filter_by(user_id=user.id)
+
+
+def access_to_modify(api_key, drink):
+    """
+    :param api_key, drink_name
+    :return: True if user has access to modify
+    """
+    user = get_user_by_key(api_key)
+    drinks = get_all_drinks()
