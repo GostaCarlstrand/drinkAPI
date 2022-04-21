@@ -12,6 +12,7 @@ class User(db.Model):
 
     def serialize(self):
         return {
+            'id': self.id,
             'first_name': self.name,
             'admin': self.admin,
             'api-key': self.api_key
