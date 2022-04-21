@@ -11,6 +11,7 @@ def create_app():
     app.config['SECRET_KEY'] = '123secret'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    app.config['JSON_SORT_KEYS'] = False
 
     admin.init_app(app)
     db.init_app(app)

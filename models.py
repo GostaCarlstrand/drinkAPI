@@ -1,4 +1,6 @@
 from flask_admin.contrib.sqla import ModelView
+from itsdangerous import Serializer
+
 from app import db, admin
 
 
@@ -7,6 +9,13 @@ class User(db.Model):
     name = db.Column(db.String(150))
     admin = db.Column(db.BOOLEAN, default=False)
     api_key = db.Column(db.String(45), nullable=False)
+
+    def serialize(self):
+        return {
+            'first_name': self.name,
+            'admin': self.admin,
+            'api-key': self.api_key
+        }
 
 
 class Drinks(db.Model):
