@@ -6,6 +6,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(150))
     admin = db.Column(db.BOOLEAN, default=False)
+    api_key = db.Column(db.String(45), nullable=False)
 
 
 class Drinks(db.Model):
@@ -40,7 +41,7 @@ class Drinks(db.Model):
     strMeasure10 = db.Column(db.String(100))
     strMeasure11 = db.Column(db.String(100))
     strMeasure12 = db.Column(db.String(100))
-    strDrinkThumb =  db.Column(db.String(100))
+    strDrinkThumb = db.Column(db.String(100))
 
 
 class MyModelView(ModelView):

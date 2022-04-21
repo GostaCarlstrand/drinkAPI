@@ -1,22 +1,15 @@
 import string
 import random
 
+from models import User
+from app import db
+
 
 def insert_user(user_data):
     api_key = generate_api_key()
-    """
-    MISSING DB
-    Save the key, user data and admin in database
-    """
-
-    user = {
-        'user_data': user_data['name'],
-        'admin': user_data['admin'],
-        'api_key': api_key
-    }
-
-    with open('api_users.txt', 'a', encoding='utf-8') as file:
-        file.write(f"{str(user)}\n")
+    new_user = User(name=user_data['name'], admin=user_data['admin'], api_key=api_key)
+    db.session.add(new_user)
+    db.session.commit()
     return api_key
 
 

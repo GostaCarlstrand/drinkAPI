@@ -2,7 +2,7 @@ import json
 from functools import wraps
 from flask import Blueprint, render_template, request, Response
 
-from mongo_handler import confirm_api_key
+from db_handler import confirm_api_key
 
 api_blueprint = Blueprint('api_blueprint', __name__)
 
@@ -26,6 +26,10 @@ def authorize_api_key(f):
 @authorize_api_key
 def get_recipe_drink():
     # Temp fake data that is return
+    data = request.args
+
+
+
     drink_recipe = {
         'main': 'vodka',
         'sub': 'gin',
