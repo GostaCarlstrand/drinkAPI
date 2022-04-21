@@ -42,6 +42,7 @@ class Drinks(db.Model):
     strMeasure11 = db.Column(db.String(100))
     strMeasure12 = db.Column(db.String(100))
     strDrinkThumb = db.Column(db.String(100))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 class MyModelView(ModelView):

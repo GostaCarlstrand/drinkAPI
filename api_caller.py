@@ -5,7 +5,7 @@ def main():
 
     url = "http://127.0.0.1:5000/api/v1/drink/"
 
-    payload = {'api_key': 'LAGJZGOFMQPEMHA', 'country': 'se'}
+    payload = {'api_key': 'LAGJZGOFMQPEMHA', 'drink': 'Vodka Redbull', }
     response = requests.get(url, params=payload)
     print(response.text)
 

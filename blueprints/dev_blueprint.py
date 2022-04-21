@@ -27,8 +27,4 @@ def sign_up():
     name = request.form['fullname']
     admin = int(request.form["admin"])
     api_key = insert_user({'name': name, 'admin': admin})
-    # new_user = User(name=name, admin=admin, api_key=api_key)
-    # db.session.add(new_user)
-    # db.session.commit()
-    # returns the api_key string that is also stored in the database
     return json.dumps({'api_key': api_key})
