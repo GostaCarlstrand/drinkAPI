@@ -1,3 +1,9 @@
 {'user_data': 'Arne', 'admin': 0, 'api_key': '0WLDMV15JEE8Z7R'}
 {'user_data': 'Adam', 'admin': 1, 'api_key': 'LAGJZGOFMQPEMHA'}
 {'user_data': 'Kalle', 'admin': 1, 'api_key': 'USU9ZIVNK91B19D'}
+{'user_data': 'Dan', 'admin': 1, 'api_key': 'U0W7Z17Q2VBVL8T'}
+{'user_data': 'Dan', 'admin': 1, 'api_key': '66HGN53TTMSADZP'}
+{'user_data': 'Dan', 'admin': 1, 'api_key': 'U2GKYATWL9XD8KG'}
+{'user_data': 'Dan', 'admin': 1, 'api_key': 'GU8PYL0RZF8T66T'}
+{'user_data': 'test', 'admin': 1, 'api_key': 'U74HDMYWD67OSEH'}
+{'user_data': 'test4', 'admin': 1, 'api_key': '74JLJI2KLVQO6QW'}

@@ -6,6 +6,7 @@ from mongo_handler import confirm_api_key
 
 api_blueprint = Blueprint('api_blueprint', __name__)
 
+
 # Add this as a decorator to check that the request has a valid API-key
 def authorize_api_key(f):
     @wraps(f)
@@ -19,6 +20,7 @@ def authorize_api_key(f):
             return Response(json.dumps(response), 401, content_type='application/json')
         return f(*args, **kwargs)
     return wrapper
+
 
 @api_blueprint.get('/api/v1/drink/')
 @authorize_api_key
