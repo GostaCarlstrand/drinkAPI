@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <h1> Sign up for api key</h1>
+    <div>
+  <form action="{{ url_for('dev_blueprint.sign_up') }}" method="post">
+    <label for="fname">Full name</label>
+    <input type="text" id="fname" name="fullname" placeholder="Your full name..">
+
+    <label for="admin">Want to be admin?</label>
+    <select id="admin" name="admin">
+      <option value="1">Yes</option>
+      <option value="0">No</option>
+    </select>
+
+    <input type="submit" value="Submit">
+  </form>
+
+<button type="button" onclick="window.location.href='{{ url_for('dev_blueprint.import_data') }}';">Import data</button>
+
+</div>
+</body>
+</html>
