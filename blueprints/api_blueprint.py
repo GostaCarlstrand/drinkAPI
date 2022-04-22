@@ -1,8 +1,7 @@
 import json
 from functools import wraps
 from flask import Blueprint, request, Response
-from controllers.api_controller import api_usage, delete_a_drink
-from controllers.dev_controller import confirm_api_key
+from controllers.api_controller import api_usage, delete_a_drink, confirm_api_key
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
@@ -39,8 +38,9 @@ def authorize_modify_db(f):
         # Extracted from the params in the api request
         data = request.args
         key = data['api_key']
+        drink_name = data['drink']
         # Can be changed depending on what the request looks like
-        if not access_to_modify(key):
+        if not access_to_modify(key, drink_name):
             response = {
                 'Result': "No drink to modify"
             }
@@ -50,18 +50,32 @@ def authorize_modify_db(f):
     return wrapper
 
 
+def data_usage(f):
+    """
+    A decorator that should be set for all api requests. Store details about the request in the database
+    :param f:
+    :return: wrapper function
+    """
+
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        endpoint = request.base_url
+        data = request.args
+        api_key = data['api_key']
+        api_usage(api_key, endpoint)
+        return f(*args, **kwargs)
+
+    return wrapper
 
 
-@api_blueprint.delete('/api/v1/drink/')
+@api_blueprint.put('/api/v1/drink/')
 @authorize_api_key
 @authorize_modify_db
-def delete_drink(drink):
-    endpoint = request.base_url
+@data_usage
+def delete_drink():
     data = request.args
     # Drink that is passed in the query string
     drink_name = data['drink']
-    api_key = data['api_key']
-    api_usage(api_key, endpoint)
     delete_a_drink(drink_name)
 
     return Response("'Status':'You have deleted'", 200, content_type='application/json')
