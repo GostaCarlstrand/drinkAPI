@@ -55,6 +55,14 @@ class Drinks(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
+class DataUsage(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    endpoint = db.Column(db.String(150))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime)
+    data_amount = db.Column(db.Integer, nullable=False)
+
+
 class MyModelView(ModelView):
     can_view_details = True
     can_set_page_size = True

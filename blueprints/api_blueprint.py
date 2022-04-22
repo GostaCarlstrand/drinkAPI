@@ -1,12 +1,11 @@
 import json
 from functools import wraps
-from flask import Blueprint, render_template, request, Response
-
+from flask import Blueprint, request, Response
+from controllers.api_controller import api_usage, delete_a_drink
 from controllers.dev_controller import confirm_api_key
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
-
 
 
 def authorize_api_key(f):
@@ -51,12 +50,19 @@ def authorize_modify_db(f):
     return wrapper
 
 
-@api_blueprint.post('/api/v1/drink/modify')
+
+
+@api_blueprint.delete('/api/v1/drink/')
+@authorize_api_key
 @authorize_modify_db
-def delete_drink():
+def delete_drink(drink):
+    endpoint = request.base_url
     data = request.args
     # Drink that is passed in the query string
     drink_name = data['drink']
+    api_key = data['api_key']
+    api_usage(api_key, endpoint)
+    delete_a_drink(drink_name)
 
     return Response("'Status':'You have deleted'", 200, content_type='application/json')
 

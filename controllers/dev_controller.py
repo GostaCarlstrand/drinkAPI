@@ -31,10 +31,3 @@ def confirm_api_key(user_key):
         return False
 
 
-def get_user_by_key(api_key):
-    """
-    A function that finds the user to which the provided api key belongs to
-    :param api_key:
-    :return: User object from database
-    """
-    return User.query.filter_by(api_key=api_key).first()

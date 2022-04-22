@@ -1,4 +1,7 @@
-from models import User, Drinks
+from datetime import datetime
+
+from app import db
+from models import User, Drinks, DataUsage
 
 
 def get_all_users():
@@ -7,6 +10,15 @@ def get_all_users():
 
 def get_user_by_id(user_id):
     return User.query.filter(User.id == user_id).first()
+
+
+def get_user_by_key(api_key):
+    """
+    A function that finds the user to which the provided api key belongs to
+    :param api_key:
+    :return: User object from database
+    """
+    return User.query.filter_by(api_key=api_key).first()
 
 
 def get_user_drinks(user):
@@ -23,10 +35,13 @@ def access_to_modify(api_key):
     :param api_key
     :return: True
     """
-    from controllers.dev_controller import get_user_by_key
     user = get_user_by_key(api_key)
     drink = get_user_drinks(user)
     if drink:
         return True
     else:
         return False
+
+
+
+
