@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template
-from db_handler import get_user_by_key
+
 from flask import Blueprint, render_template, jsonify
+
+from controllers.dev_controller import get_user_by_key
 from controllers.user_controller import get_all_users, get_user_by_id
 from models import User
 

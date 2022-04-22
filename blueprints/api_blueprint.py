@@ -2,7 +2,8 @@ import json
 from functools import wraps
 from flask import Blueprint, render_template, request, Response
 
-from db_handler import confirm_api_key, access_to_modify
+from controllers.dev_controller import confirm_api_key
+from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
 

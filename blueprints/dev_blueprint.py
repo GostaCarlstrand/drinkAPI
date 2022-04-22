@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, render_template, request
-from db_handler import insert_user
+
+from controllers.dev_controller import insert_user
 from models import User
 from app import db
 import pandas as pd
