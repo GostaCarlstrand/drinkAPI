@@ -4,10 +4,19 @@ from models import User, Drinks
 
 
 def get_all_users():
+    """
+    Get all users from db
+    :return: List with User objects
+    """
     return User.query.filter(User.id).all()
 
 
 def get_user_by_id(user_id):
+    """
+    Get a user by their id
+    :param user_id:
+    :return: User object
+    """
     return User.query.filter(User.id == user_id).first()
 
 
@@ -25,21 +34,7 @@ def get_user_drinks(user):
     Function to get all drinks that belong to a specific user
     :return: If any, drinks as objects
     """
-    return Drinks.query.filter_by(user_id=user.id).first()
-
-
-def access_drink(user, drink_name):
-    """
-    Check if user has access to modify the drink
-    :return:
-    """
-    # Get all drinks with that name
-    drinks = get_drinks_by_name(drink_name)
-
-    for drink in drinks:
-        if user.id == drink.user_id:
-            return True
-    return False
+    return Drinks.query.filter_by(user_id=user.id).all()
 
 
 def access_to_modify(api_key, drink_name):
@@ -49,13 +44,20 @@ def access_to_modify(api_key, drink_name):
     :return: True
     """
     user = get_user_by_key(api_key)
-    if access_drink(user, drink_name):
-        return True
-    else:
-        return False
+    drinks = get_drinks_by_name(drink_name)
+
+    for drink in drinks:
+        if user.id == drink.user_id:
+            return True
+    return False
 
 
 def insert_user(user_data):
+    """
+    Insert a new user into the db
+    :param user_data:
+    :return: User api key
+    """
     api_key = generate_api_key()
     new_user = User(name=user_data['name'], admin=user_data['admin'], api_key=api_key)
     db.session.add(new_user)

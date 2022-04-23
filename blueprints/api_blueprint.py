@@ -1,7 +1,7 @@
 import json
 from functools import wraps
 from flask import Blueprint, request, Response
-from controllers.api_controller import api_usage, delete_a_drink, confirm_api_key
+from controllers.api_controller import api_usage, delete_drinks, confirm_api_key
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
@@ -68,21 +68,27 @@ def data_usage(f):
     return wrapper
 
 
-@api_blueprint.put('/api/v1/drink/')
+@api_blueprint.delete('/api/v1/drink/')
 @authorize_api_key
 @authorize_modify_db
 @data_usage
-def delete_drink():
+def delete_all_drinks():
+    """
+    Deletes drinks from the user, only drinks with the same name are effected
+    :return:
+    """
     data = request.args
     # Drink that is passed in the query string
+    api_key = data['api_key']
     drink_name = data['drink']
-    delete_a_drink(drink_name)
-
-    return Response("'Status':'You have deleted'", 200, content_type='application/json')
+    delete_drinks(api_key, drink_name)
+    return Response("'Status':'Deletion succeeded'", 200, content_type='application/json')
 
 
 @api_blueprint.get('/api/v1/drink/')
 @authorize_api_key
+@authorize_modify_db
+@data_usage
 def get_recipe_drink():
     # Temp fake data that is return
     data = request.args

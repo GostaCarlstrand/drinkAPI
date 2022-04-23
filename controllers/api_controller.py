@@ -38,8 +38,20 @@ def api_usage(api_key, endpoint):
     return
 
 
-def delete_a_drink(drink_name):
-    drink = get_drinks_by_name(drink_name)
+def delete_drinks(api_key, drink_name):
+    """
+    Deletes all drinks with the given name. Only affects the authorized users drinks
+    :param api_key:
+    :param drink_name:
+    :return:
+    """
+    from controllers.user_controller import get_user_by_key
+    from controllers.user_controller import get_user_drinks
+    user = get_user_by_key(api_key)
+    drinks = get_user_drinks(user)
+    [db.session.delete(drink) for drink in drinks if drink.strDrink == drink_name]
+    db.session.commit()
+    return
 
 
 def generate_api_key():
