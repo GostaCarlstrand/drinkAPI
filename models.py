@@ -1,6 +1,4 @@
 from flask_admin.contrib.sqla import ModelView
-from itsdangerous import Serializer
-
 from app import db, admin
 
 
@@ -52,7 +50,19 @@ class Drinks(db.Model):
     strMeasure11 = db.Column(db.String(100))
     strMeasure12 = db.Column(db.String(100))
     strDrinkThumb = db.Column(db.String(100))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def serialize(self):
+        return {
+            'name': self.strDrink,
+            'alcohol': self.strAlcoholic,
+            'category': self.strCategory,
+            'glass': self.strGlass,
+            'instructions': self.strInstructions,
+            'first_ingredient': self.strIngredient1
+        }
+
+
 
 
 class DataUsage(db.Model):

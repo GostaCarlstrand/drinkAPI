@@ -9,13 +9,13 @@ from models import User
 user_blueprint = Blueprint('user_blueprint', __name__)
 
 
-@user_blueprint.get('/user')
+@user_blueprint.get('/api/v1/user')
 def get_users():
     users = get_all_users()
     return jsonify([User.serialize(user) for user in users])
 
 
-@user_blueprint.get('/user/<user_id>')
+@user_blueprint.get('/api/v1/user/<user_id>')
 def profile_get_user(user_id):
     user_id = get_user_by_id(user_id)
     return jsonify([User.serialize(user_id)])

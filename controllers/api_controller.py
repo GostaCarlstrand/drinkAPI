@@ -23,6 +23,26 @@ def get_drinks_by_name(drink_name):
     return data
 
 
+def get_drinks_by_alcohol(alcohol):
+    """
+    Get drinks from db with or without alcohol
+    :param alcohol:
+    :return: List with alcohol or nonalcoholic drinks
+    """
+    data = Drinks.query.filter(Drinks.strAlcoholic == alcohol).all()
+    return data
+
+
+def get_drinks_by_type(alcohol):
+    """
+    Get drinks from db with a specific liquor
+    :param alcohol:
+    :return: List with specific liquor drinks
+    """
+    data = Drinks.query.filter(Drinks.strIngredient1 == alcohol).all()
+    return data
+
+
 def api_usage(api_key, endpoint):
     """
     Stores the amount of api calls that the user has made

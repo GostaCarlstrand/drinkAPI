@@ -1,8 +1,9 @@
 import json
 from functools import wraps
-from flask import Blueprint, request, Response
-from controllers.api_controller import api_usage, delete_drinks, confirm_api_key
+from flask import Blueprint, request, Response, jsonify
+from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_drinks_by_type
 from controllers.user_controller import access_to_modify
+from models import Drinks
 
 api_blueprint = Blueprint('api_blueprint', __name__)
 
@@ -101,3 +102,16 @@ def get_recipe_drink():
     }
     return Response(json.dumps(drink_recipe), 200, content_type='application/json')
 
+
+@api_blueprint.get('/api/v1/drink/<alcohol>')
+def get_alcohol(alcohol):
+    alcohol = get_drinks_by_alcohol(alcohol)
+
+    return jsonify([Drinks.serialize(alco) for alco in alcohol])
+
+
+#@api_blueprint.get('/api/v1/drink/<alcohol_type>')
+#def get_alcohol_type(alcohol_type):
+#    alcohol_type = get_drinks_by_type(alcohol_type)
+#
+#    return jsonify([Drinks.serialize(alcohol) for alcohol in alcohol_type])
