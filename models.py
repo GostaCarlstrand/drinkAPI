@@ -1,4 +1,6 @@
 from flask_admin.contrib.sqla import ModelView
+from itsdangerous import Serializer
+
 from app import db, admin
 
 
@@ -7,6 +9,14 @@ class User(db.Model):
     name = db.Column(db.String(150))
     admin = db.Column(db.BOOLEAN, default=False)
     api_key = db.Column(db.String(45), nullable=False)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'first_name': self.name,
+            'admin': self.admin,
+            'api-key': self.api_key
+        }
 
 
 class Drinks(db.Model):
@@ -42,6 +52,15 @@ class Drinks(db.Model):
     strMeasure11 = db.Column(db.String(100))
     strMeasure12 = db.Column(db.String(100))
     strDrinkThumb = db.Column(db.String(100))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+
+class DataUsage(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    endpoint = db.Column(db.String(150))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime)
+    data_amount = db.Column(db.Integer, nullable=False)
 
 
 class MyModelView(ModelView):

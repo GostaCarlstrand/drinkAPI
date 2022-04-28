@@ -11,16 +11,15 @@ def create_app():
     app.config['SECRET_KEY'] = '123secret'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    app.config['JSON_SORT_KEYS'] = False
 
     admin.init_app(app)
     db.init_app(app)
 
     from blueprints.api_blueprint import api_blueprint
     from blueprints.user_blueprint import user_blueprint
-    from blueprints.dev_blueprint import dev_blueprint
     app.register_blueprint(api_blueprint)
     app.register_blueprint(user_blueprint)
-    app.register_blueprint(dev_blueprint)
 
     return app
 
