@@ -3,6 +3,7 @@ import string
 import random
 from app import db
 from models import Drinks, DataUsage, User
+from sqlalchemy import and_, or_, not_
 
 
 def get_all_drinks():
@@ -19,6 +20,7 @@ def get_drinks_by_name(drink_name):
     :param drink_name:
     :return: List with drinks
     """
+
     data = Drinks.query.filter_by(strDrink=drink_name).all()
     return data
 
@@ -29,18 +31,19 @@ def get_drinks_by_alcohol(alcohol):
     :param alcohol:
     :return: List with alcohol or nonalcoholic drinks
     """
-    data = Drinks.query.filter(Drinks.strAlcoholic == alcohol).all()
-    return data
 
-
-def get_drinks_by_type(alcohol):
-    """
-    Get drinks from db with a specific liquor
-    :param alcohol:
-    :return: List with specific liquor drinks
-    """
-    data = Drinks.query.filter(Drinks.strIngredient1 == alcohol).all()
-    return data
+    query = Drinks.query.filter(
+        or_(
+            Drinks.strAlcoholic.like(alcohol),
+            Drinks.strIngredient1.like(alcohol),
+            Drinks.strIngredient2.like(alcohol),
+            Drinks.strIngredient3.like(alcohol),
+            Drinks.strIngredient4.like(alcohol),
+            Drinks.strIngredient5.like(alcohol),
+            Drinks.strIngredient6.like(alcohol),
+        )
+    )
+    return query
 
 
 def api_usage(api_key, endpoint):

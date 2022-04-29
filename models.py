@@ -52,18 +52,6 @@ class Drinks(db.Model):
     strDrinkThumb = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def serialize(self):
-        return {
-            'name': self.strDrink,
-            'alcohol': self.strAlcoholic,
-            'category': self.strCategory,
-            'glass': self.strGlass,
-            'instructions': self.strInstructions,
-            'first_ingredient': self.strIngredient1
-        }
-
-
-
 
 class DataUsage(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

@@ -1,7 +1,7 @@
 import json
 from functools import wraps
 from flask import Blueprint, request, Response, jsonify
-from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_drinks_by_type
+from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol
 from controllers.user_controller import access_to_modify
 from models import Drinks
 
@@ -14,16 +14,19 @@ def authorize_api_key(f):
     :param f:
     :return: wrapper function
     """
+
     @wraps(f)
     def wrapper(*args, **kwargs):
         # Extracted from the params in the api request
-        key = request.args.get('api_key')
+        key = request.headers.get('api_key')
+        print()
         if not confirm_api_key(key):
             response = {
                 'Result': "Your API key is invalid"
             }
             return Response(json.dumps(response), 401, content_type='application/json')
         return f(*args, **kwargs)
+
     return wrapper
 
 
@@ -94,8 +97,6 @@ def get_recipe_drink():
     # Temp fake data that is return
     data = request.args
 
-
-
     drink_recipe = {
         'main': 'vodka',
         'sub': 'gin',
@@ -104,14 +105,35 @@ def get_recipe_drink():
 
 
 @api_blueprint.get('/api/v1/drink/<alcohol>')
+@authorize_api_key
 def get_alcohol(alcohol):
     alcohol = get_drinks_by_alcohol(alcohol)
 
-    return jsonify([Drinks.serialize(alco) for alco in alcohol])
+    output = []
+    for alco in alcohol:
+        alco_data = {}
+        alco_data['name'] = alco.strDrink
+        alco_data['alcohol'] = alco.strAlcoholic
+        alco_data['category'] = alco.strCategory
+        alco_data['glass'] = alco.strGlass
+        alco_data['instructions'] = alco.strInstructions
+        alco_data['ingredients'] = [alco.strIngredient1, alco.strIngredient2, alco.strIngredient3, alco.strIngredient4,
+                                    alco.strIngredient5, alco.strIngredient6, alco.strIngredient7, alco.strIngredient8,
+                                    alco.strIngredient9, alco.strIngredient10, alco.strIngredient11,
+                                    alco.strIngredient12]
+        output.append(alco_data)
+
+    clean_list = remove_none(output)
+
+    return jsonify({'Drinks': clean_list})
 
 
-#@api_blueprint.get('/api/v1/drink/<alcohol_type>')
-#def get_alcohol_type(alcohol_type):
-#    alcohol_type = get_drinks_by_type(alcohol_type)
-#
-#    return jsonify([Drinks.serialize(alcohol) for alcohol in alcohol_type])
+def remove_none(obj):
+    if isinstance(obj, (list, tuple, set)):
+        return type(obj)(remove_none(x) for x in obj if x is not None)
+    elif isinstance(obj, dict):
+        return type(obj)((remove_none(k), remove_none(v))
+                         for k, v in obj.items() if k is not None and v is not None)
+    else:
+        return obj
+
