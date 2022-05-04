@@ -62,7 +62,6 @@ def before_request():
 
 
 @api_blueprint.delete('/api/v1/drink/')
-@authorize_api_key
 @authorize_modify_db
 def delete_all_drinks():
     """
@@ -78,14 +77,12 @@ def delete_all_drinks():
 
 
 @api_blueprint.get('/api/v1/drink/')
-@authorize_api_key
 def get_all_drink():
     all_drinks = get_all_drinks()
     return jsonify({'Drinks': all_drinks})
 
 
 @api_blueprint.get('/api/v1/drink/<alcohol>')
-@authorize_api_key
 def get_alcohol(alcohol):
     alcohol = get_drinks_by_alcohol(alcohol)
 
