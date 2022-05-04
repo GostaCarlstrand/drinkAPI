@@ -1,6 +1,4 @@
 from flask_admin.contrib.sqla import ModelView
-from itsdangerous import Serializer
-
 from app import db, admin
 
 
@@ -52,7 +50,7 @@ class Drinks(db.Model):
     strMeasure11 = db.Column(db.String(100))
     strMeasure12 = db.Column(db.String(100))
     strDrinkThumb = db.Column(db.String(100))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class DataUsage(db.Model):
@@ -71,3 +69,5 @@ class MyModelView(ModelView):
 
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Drinks, db.session))
+admin.add_view(MyModelView(DataUsage, db.session))
+

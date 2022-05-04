@@ -1,3 +1,5 @@
+from flask import flash, redirect, url_for, render_template
+
 from app import db
 from controllers.api_controller import generate_api_key, get_drinks_by_name
 from models import User, Drinks
@@ -58,6 +60,7 @@ def insert_user(user_data):
     :param user_data:
     :return: User api key
     """
+
     api_key = generate_api_key()
     new_user = User(name=user_data['name'], admin=user_data['admin'], api_key=api_key)
     db.session.add(new_user)
