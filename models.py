@@ -69,3 +69,5 @@ class MyModelView(ModelView):
 
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Drinks, db.session))
+admin.add_view(MyModelView(DataUsage, db.session))
+

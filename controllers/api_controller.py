@@ -25,22 +25,23 @@ def get_drinks_by_name(drink_name):
     return data
 
 
-def get_drinks_by_alcohol(alcohol):
+def get_drinks_by_alcohol(alcohol_data):
     """
     Get drinks from db with or without alcohol
-    :param alcohol:
+    :param alcohol_data:
     :return: List with alcohol or nonalcoholic drinks
     """
 
     query = Drinks.query.filter(
         or_(
-            Drinks.strAlcoholic.like(alcohol),
-            Drinks.strIngredient1.like(alcohol),
-            Drinks.strIngredient2.like(alcohol),
-            Drinks.strIngredient3.like(alcohol),
-            Drinks.strIngredient4.like(alcohol),
-            Drinks.strIngredient5.like(alcohol),
-            Drinks.strIngredient6.like(alcohol),
+            Drinks.strDrink.like(alcohol_data),
+            Drinks.strAlcoholic.like(alcohol_data),
+            Drinks.strIngredient1.like(alcohol_data),
+            Drinks.strIngredient2.like(alcohol_data),
+            Drinks.strIngredient3.like(alcohol_data),
+            Drinks.strIngredient4.like(alcohol_data),
+            Drinks.strIngredient5.like(alcohol_data),
+            Drinks.strIngredient6.like(alcohol_data),
         )
     )
     return query
@@ -85,7 +86,7 @@ def generate_api_key():
 
 
 def confirm_api_key(api_key):
-    if User.query.filter_by(api_key=api_key).first():
+    if User.query.filter(User.api_key == api_key).first():
         return True
     else:
         return False
