@@ -74,7 +74,7 @@ def data_usage(f):
 @data_usage
 def delete_all_drinks():
     """
-    Deletes drinks from the user, only drinks with the same name are effected
+    Deletes drinks from the user, only drinks with the same name are affected
     :return:
     """
     data = request.args
