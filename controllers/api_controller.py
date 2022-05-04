@@ -90,3 +90,25 @@ def confirm_api_key(api_key):
         return True
     else:
         return False
+
+
+def create_drink(data, api_key):
+    from controllers.user_controller import get_user_by_key
+    drink = Drinks()
+    if 'alcohol' in data:
+        drink.strAlcohol = data['alcohol']
+    if 'category' in data:
+        drink.strCategory = data['category']
+    if 'glass' in data:
+        drink.strGlass = data['glass']
+    if 'instructions' in data:
+        drink.strInstructions = data['instructions']
+
+    drink.assign_ingredients(data['ingredients'])
+
+    user = get_user_by_key(api_key)
+    drink.user_id = user.id
+    drink.strDrink = data['name']
+    db.session.add(drink)
+    db.session.commit()
+    return

@@ -1,10 +1,21 @@
 import json
 from functools import wraps
 from flask import Blueprint, request, Response, jsonify
-from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_all_drinks
+from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
+    create_drink
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
+
+
+"""
+name - name of drink
+alcohol - if alcohol or not
+category - Label for what type of drink, cocktail for example
+glass - If user recommends specific type of glass
+instructions - Instructions on how to make the drink
+ingredients - A list with the ingredients needed to make the drink
+"""
 
 
 def authorize_api_key(f):
@@ -41,7 +52,7 @@ def authorize_modify_db(f):
         # Extracted from the params in the api request
         data = request.json
         key = request.headers.get('api_key')
-        drink_name = data['test']
+        drink_name = data['name']
         # Can be changed depending on what the request looks like
         if not access_to_modify(key, drink_name):
             response = {
@@ -71,9 +82,20 @@ def delete_all_drinks():
     data = request.json
     # Drink that is passed in the query string
     api_key = request.headers.get('api_key')
-    drink_name = data['test']
+    drink_name = data['name']
     delete_drinks(api_key, drink_name)
     return Response("'Status':'Deletion succeeded'", 200, content_type='application/json')
+
+
+@api_blueprint.post('/api/v1/drink/')
+def post_new_drink():
+    data = request.json
+    api_key = request.headers.get('api_key')
+    if 'ingredients' in data and 'name' in data:
+        create_drink(data, api_key)
+        return Response("'Status':'Added drink to database'", 200, content_type='application/json')
+    else:
+        return Response("'Status':'Error, ingredients or name is missing'", 400, content_type='application/json')
 
 
 @api_blueprint.get('/api/v1/drink/')

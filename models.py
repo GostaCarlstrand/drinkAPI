@@ -52,6 +52,48 @@ class Drinks(db.Model):
     strDrinkThumb = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def assign_ingredients(self, ingredients):
+        for count, ingredient in enumerate(ingredients):
+            count += 1
+            if count == 1:
+                self.strIngredient1 = ingredient
+                continue
+            if count == 2:
+                self.strIngredient2 = ingredient
+                continue
+            if count == 3:
+                self.strIngredient3 = ingredient
+                continue
+            if count == 4:
+                self.strIngredient4 = ingredient
+                continue
+            if count == 5:
+                self.strIngredient5 = ingredient
+                continue
+            if count == 6:
+                self.strIngredient6 = ingredient
+                continue
+            if count == 7:
+                self.strIngredient7 = ingredient
+                continue
+            if count == 8:
+                self.strIngredient8 = ingredient
+                continue
+            if count == 9:
+                self.strIngredient9 = ingredient
+                continue
+            if count == 10:
+                self.strIngredient10 = ingredient
+                continue
+            if count == 11:
+                self.strIngredient11 = ingredient
+                continue
+            if count == 12:
+                self.strIngredient12 = ingredient
+                continue
+
+
+
 
 class DataUsage(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

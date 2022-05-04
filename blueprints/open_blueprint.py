@@ -28,6 +28,7 @@ def sign_up():
 
     return json.dumps({'api_key': api_key})
 
+
 @open_blueprint.get('/import')
 def import_data():
     drink_data = pd.read_csv('cleaned_drink.csv')

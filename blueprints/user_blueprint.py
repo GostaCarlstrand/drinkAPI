@@ -40,6 +40,3 @@ def profile_get_user(user_id):
 
     return jsonify([User.serialize(user_id)])
 
-
-
-
