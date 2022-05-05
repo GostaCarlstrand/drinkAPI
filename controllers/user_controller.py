@@ -1,8 +1,9 @@
 from flask import flash, redirect, url_for, render_template
 
 from app import db
-from controllers.api_controller import generate_api_key, get_drinks_by_name
+from controllers.api_controller import generate_api_key, get_drinks_by_name, get_drink_by_id
 from models import User, Drinks
+from sqlalchemy import and_, or_, not_
 
 
 def get_all_users():
@@ -39,18 +40,17 @@ def get_user_drinks(user):
     return Drinks.query.filter_by(user_id=user.id).all()
 
 
-def access_to_modify(api_key, drink_name):
+def access_to_modify(api_key, drink_id):
     """
     If the user has access to modify the drink
     :param (api_key, drink_name)
     :return: True
     """
     user = get_user_by_key(api_key)
-    drinks = get_drinks_by_name(drink_name)
+    drink = get_drink_by_id(drink_id)
 
-    for drink in drinks:
-        if user.id == drink.user_id:
-            return True
+    if drink and user.id == drink.user_id:
+        return True
     return False
 
 

@@ -93,8 +93,6 @@ class Drinks(db.Model):
                 continue
 
 
-
-
 class DataUsage(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     endpoint = db.Column(db.String(150))

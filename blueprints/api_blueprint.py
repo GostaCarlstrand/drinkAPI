@@ -2,7 +2,7 @@ import json
 from functools import wraps
 from flask import Blueprint, request, Response, jsonify
 from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
-    create_drink
+    create_drink, modify_user_drink
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
@@ -52,9 +52,15 @@ def authorize_modify_db(f):
         # Extracted from the params in the api request
         data = request.json
         key = request.headers.get('api_key')
-        drink_name = data['name']
+        if 'drink_id' in data:
+            if not isinstance(data['drink_id'], int):
+                response = {
+                    'Status': "Error, drink_id must be a number"
+                }
+                return Response(json.dumps(response), 400, content_type='application/json')
+        drink_id = data['drink_id']
         # Can be changed depending on what the request looks like
-        if not access_to_modify(key, drink_name):
+        if not access_to_modify(key, drink_id):
             response = {
                 'Result': "No drink to modify"
             }
@@ -73,7 +79,7 @@ def before_request():
 
 
 @api_blueprint.delete('/api/v1/drink/')
-@authorize_modify_db
+# Do not work atm @authorize_modify_db
 def delete_all_drinks():
     """
     Deletes drinks from the user, only drinks with the same name are affected
@@ -85,6 +91,17 @@ def delete_all_drinks():
     drink_name = data['name']
     delete_drinks(api_key, drink_name)
     return Response("'Status':'Deletion succeeded'", 200, content_type='application/json')
+
+
+@api_blueprint.put('/api/v1/drink/')
+@authorize_modify_db
+def modify_drink():
+    data = request.json
+    if 'drink_id' in data:
+        modify_user_drink(data)
+        return Response("'Status':'Modification succeeded'", 200, content_type='application/json')
+    else:
+        return Response("'Status':'Error, drink id is missing'", 400, content_type='application/json')
 
 
 @api_blueprint.post('/api/v1/drink/')
