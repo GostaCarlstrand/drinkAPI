@@ -34,6 +34,7 @@ def get_drinks_by_alcohol(alcohol_data):
 
     query = Drinks.query.filter(
         or_(
+            Drinks.index.like(alcohol_data),
             Drinks.strDrink.like(alcohol_data),
             Drinks.strAlcoholic.like(alcohol_data),
             Drinks.strIngredient1.like(alcohol_data),

@@ -128,6 +128,7 @@ def get_alcohol(alcohol):
     output = []
     for alco in alcohol:
         alco_data = {}
+        alco_data['id'] = alco.index
         alco_data['name'] = alco.strDrink
         alco_data['alcohol'] = alco.strAlcoholic
         alco_data['category'] = alco.strCategory
