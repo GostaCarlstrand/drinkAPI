@@ -117,8 +117,13 @@ def post_new_drink():
 
 @api_blueprint.get('/api/v1/drink/')
 def get_all_drink():
+    list_drinks = []
     all_drinks = get_all_drinks()
-    return jsonify({'Drinks': all_drinks})
+    for drink in all_drinks:
+        drink.__dict__.pop('_sa_instance_state')
+        list_drinks.append(drink.__dict__)
+
+    return jsonify({'Drinks': list_drinks})
 
 
 @api_blueprint.get('/api/v1/drink/<alcohol>')
