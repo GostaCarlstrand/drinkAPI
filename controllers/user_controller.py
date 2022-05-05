@@ -1,4 +1,6 @@
-from flask import flash, redirect, url_for, render_template
+import json
+
+from flask import flash, redirect, url_for, render_template, Response
 
 from app import db
 from controllers.api_controller import generate_api_key, get_drinks_by_name
@@ -66,6 +68,47 @@ def insert_user(user_data):
     db.session.add(new_user)
     db.session.commit()
     return api_key
+
+
+def check_user_keys(user_info):
+    """
+    Check that the keys in the user update is correct
+    :param json_response: user input for update
+    :return: None if no errors, a Response object if an error is found
+    """
+    accepted_keys = ['name', 'admin', 'api_key']
+
+    for key in user_info:
+        if key not in accepted_keys:
+            return Response(json.dumps({'Error': f'The key {key} is not accepted in the json request'}),
+                            400,
+                            content_type='application/json')
+
+    for key in accepted_keys:
+        if key not in user_info:
+            return Response(json.dumps({'Error': f'The required key {key} is not present in the json request'}),
+                            400,
+                            content_type='application/json')
+    return None
+
+
+def user_check(user_id):
+    """
+    Check if user_id is an integer
+    :param user_id: user input
+    :return: user_id if no errors
+    """
+    if user_id.isdigit():
+        user_id = int(user_id)
+    else:
+        return Response(json.dumps({'Error': 'Id must be an integer'}), 400, content_type='application/json')
+
+    user_id = get_user_by_id(user_id)
+
+    if not user_id:
+        return Response(json.dumps({'Error': f'User is not present in the database'}),
+                        404, content_type='application/json')
+    return user_id
 
 
 
