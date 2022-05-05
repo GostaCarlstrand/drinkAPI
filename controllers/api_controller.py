@@ -114,23 +114,16 @@ def create_drink(data, api_key):
     return
 
 
-
-"""
-name - name of drink
-alcohol - if alcohol or not
-category - Label for what type of drink, cocktail for example
-glass - If user recommends specific type of glass
-instructions - Instructions on how to make the drink
-ingredients - A list with the ingredients needed to make the drink
-"""
-
 def get_drink_by_id(drink_id):
     return Drinks.query.filter_by(index=drink_id).first()
 
+
 def modify_user_drink(data):
+    drink_cursor = db.session.query(Drinks).filter(Drinks.index == data['drink_id'])
+
     def update(new_data):
-        db.session.query(Drinks).filter(Drinks.index == data['drink_id']).\
-            update(new_data, synchronize_session="fetch")
+        drink_cursor.update(new_data, synchronize_session="fetch")
+
     drink = get_drink_by_id(data['drink_id'])
 
     if 'name' in data:
