@@ -1,15 +1,12 @@
-import json
+from flask import Blueprint, jsonify, request, Response
 from app import db
-import pandas as pd
-from flask import Blueprint, render_template, jsonify, request, flash, redirect, url_for, Response
 from blueprints.api_blueprint import authorize_api_key
 from controllers.api_controller import api_usage
-from controllers.user_controller import get_all_users, get_user_by_id, insert_user
+from controllers.user_controller import get_all_users, get_user_by_key, user_check, check_user_keys
 from models import User
 
 
 user_blueprint = Blueprint('user_blueprint', __name__)
-
 
 @user_blueprint.before_request
 @authorize_api_key
@@ -19,7 +16,7 @@ def before_request():
     api_usage(api_key, endpoint)
 
 
-@user_blueprint.get('/api/v1/user')
+@user_blueprint.get('/api/v1/user/')
 def get_users():
     users = get_all_users()
     return jsonify([User.serialize(user) for user in users])
@@ -27,16 +24,26 @@ def get_users():
 
 @user_blueprint.get('/api/v1/user/<user_id>')
 def profile_get_user(user_id):
-    if user_id.isdigit():
-        user_id = int(user_id)
-    else:
-        return Response(json.dumps({'Error': 'Id must be an integer'}), 400, content_type='application/json')
+    user = user_check(user_id)
+    return jsonify([User.serialize(user)])
 
-    user_id = get_user_by_id(user_id)
 
-    if not user_id:
-        return Response(json.dumps({'Error': f'User is not present in the database'}),
-                        404, content_type='application/json')
+@user_blueprint.put('/api/v1/user/<user_id>')
+def update_user(user_id):
+    user = user_check(user_id)
+    api_key = request.headers.get('api_key')
+    user_key = get_user_by_key(api_key)
 
-    return jsonify([User.serialize(user_id)])
+    update_user_info = request.json
+    response = check_user_keys(update_user_info)
+    if response:
+        return response
+
+    if user == user_key:
+        user.name = update_user_info['name']
+        user.admin = update_user_info['admin']
+        user.api_key = update_user_info['api_key']
+        db.session.commit()
+
+    return Response("'Status':'User updated'", 200, content_type='application/json')
 
