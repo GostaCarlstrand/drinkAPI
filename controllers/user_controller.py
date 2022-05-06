@@ -2,7 +2,7 @@ import json
 from flask import Response
 from app import db
 from controllers.api_controller import generate_api_key, get_drink_by_id
-from models import User, Drinks
+from models import User, Drinks, DataUsage
 
 
 def get_all_users():
@@ -37,6 +37,14 @@ def get_user_drinks(user):
     :return: If any, drinks as objects
     """
     return Drinks.query.filter_by(user_id=user.id).all()
+
+
+def get_user_requests(user):
+    """
+    Function to get last total request amount that belong to a specific user
+    :return: last object in DataUsage for specific user
+    """
+    return DataUsage.query.filter_by(user_id=user.id).order_by(DataUsage.id.desc()).first()
 
 
 def access_to_modify(api_key, drink_id):

@@ -55,10 +55,18 @@ def api_usage(api_key, endpoint):
     :return:
     """
     from controllers.user_controller import get_user_by_key
+    from controllers.user_controller import get_user_requests
     user = get_user_by_key(api_key)
     date = datetime.now()
     # Data amount should be calculated somehow
-    db.session.add(DataUsage(endpoint=endpoint, user_id=user.id, timestamp=date, data_amount=10))
+    total_requests = get_user_requests(user)
+
+    if total_requests is None:
+        total_requests = 1
+    else:
+        total_requests = total_requests.total_requests + 1
+
+    db.session.add(DataUsage(endpoint=endpoint, user_id=user.id, timestamp=date, total_requests=total_requests))
     db.session.commit()
     return
 

@@ -90,7 +90,7 @@ class DataUsage(db.Model):
     endpoint = db.Column(db.String(150))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime)
-    data_amount = db.Column(db.Integer, nullable=False)
+    total_requests = db.Column(db.Integer, nullable=False)
 
 
 class MyModelView(ModelView):
