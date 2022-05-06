@@ -8,14 +8,6 @@ class User(db.Model):
     admin = db.Column(db.BOOLEAN, default=False)
     api_key = db.Column(db.String(45), nullable=False)
 
-    def serialize(self):
-        return {
-            'id': self.id,
-            'first_name': self.name,
-            'admin': self.admin,
-            'api-key': self.api_key
-        }
-
 
 class Drinks(db.Model):
     __tablename__ = "drinks"

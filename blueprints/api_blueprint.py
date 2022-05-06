@@ -2,7 +2,7 @@ import json
 from functools import wraps
 from flask import Blueprint, request, Response, jsonify
 from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
-    create_drink, modify_user_drink
+    create_drink, modify_user_drink, remove_none
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
@@ -150,12 +150,4 @@ def get_alcohol(alcohol):
     return jsonify({'Drinks': clean_list})
 
 
-def remove_none(obj):
-    if isinstance(obj, (list, tuple, set)):
-        return type(obj)(remove_none(x) for x in obj if x is not None)
-    elif isinstance(obj, dict):
-        return type(obj)((remove_none(k), remove_none(v))
-                         for k, v in obj.items() if k is not None and v is not None)
-    else:
-        return obj
 

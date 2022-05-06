@@ -18,8 +18,13 @@ def before_request():
 
 @user_blueprint.get('/api/v1/user/')
 def get_users():
-    users = get_all_users()
-    return jsonify([User.serialize(user) for user in users])
+    list_users = []
+    all_users = get_all_users()
+    for user in all_users:
+        user.__dict__.pop('_sa_instance_state')
+        list_users.append(user.__dict__)
+
+    return jsonify({'Drinks': list_users})
 
 
 @user_blueprint.get('/api/v1/user/<user_id>')

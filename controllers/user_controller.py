@@ -1,11 +1,8 @@
 import json
-
-from flask import flash, redirect, url_for, render_template, Response
-
+from flask import Response
 from app import db
-from controllers.api_controller import generate_api_key, get_drinks_by_name, get_drink_by_id
+from controllers.api_controller import generate_api_key, get_drink_by_id
 from models import User, Drinks
-from sqlalchemy import and_, or_, not_
 
 
 def get_all_users():
