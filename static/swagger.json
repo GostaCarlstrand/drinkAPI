@@ -133,8 +133,11 @@
         }
       },
       "delete": {
+        "summary": "Delete a drink",
         "responses": {
-
+        "200": {
+          "description": "OK"
+        }
         }
       }
     }
