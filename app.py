@@ -1,10 +1,23 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
+from flask_swagger_ui import get_swaggerui_blueprint
 
 db = SQLAlchemy()
 admin = Admin()
 
+# Swagger
+
+SWAGGER_URL = '/swagger'
+SWAGGER_JSON = '/static/swagger.json'
+SWAGGER_BLUEPRINT = get_swaggerui_blueprint (
+    SWAGGER_URL,
+    SWAGGER_JSON,
+    config={
+        'app_name': 'Drink API database'
+    }
+
+)
 
 def create_app():
     app = Flask(__name__)
@@ -22,9 +35,8 @@ def create_app():
     app.register_blueprint(api_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(open_blueprint)
-
+    app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
     return app
-
 
 if __name__ == "__main__":
     create_app().run()

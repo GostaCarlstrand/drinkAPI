@@ -1,0 +1,144 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Drink API database",
+    "version": "1.0.0",
+    "description": "This is an API with over 500 different drinks"
+  },
+  "servers": [
+    {
+      "url": "/api/v1.0.0",
+      "description": "Group 5 server"
+    }
+  ],
+  "paths": {
+    "/api/v1/drink/": {
+      "get": {
+        "summary": "Get all drinks from database",
+        "description": "Full list of all drinks on the database",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new drink to the database",
+        "description": "Have to own the API-key",
+        "requestBody": {
+          "description": "Requesting drink object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/drinkRequestBody"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/drinkResponseBody"
+            }
+          },
+          "400": {
+            "description": "'Status':'Error, ingredients or name is missing'",
+            "schema": {
+              "$ref": "#/components/schemas/drinkErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Change the id number",
+        "description": "If you have to change any drinks id number on the database",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the drink that we want to match",
+            "schema": {
+              "$ref": "#components/schemas/id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/drinkObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "'Status':'Error, drink id is missing'",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/errorobject"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a drink",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "drink_name",
+            "required": true,
+            "description": "Name of the drink you want to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json":{
+                "schema": {
+                  "$ref": "#components/schemas/deleteObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/drink/<alcohol>": {
+      "get": {
+      }
+    },
+    "/api/v1/user/": {
+      "get": {
+        "summary": "Get access to all users",
+        "description": "Find the right user from the database",
+        "parameters": []
+      }
+    },
+    "/api/v1/user/<user_id>": {
+      "get": {
+        "summary": "Get the user by id",
+        "description": "Find the right user by searching from their id"
+      },
+      "put": {
+      }
+    }
+  }
+}
