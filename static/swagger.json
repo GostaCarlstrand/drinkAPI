@@ -1,18 +1,18 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Drink API database",
-    "version": "1.0.0",
-    "description": "This is an API with over 500 different drinks"
-  },
-  "servers": [
-    {
-      "url": "/api/v1.0.0",
-      "description": "Group 5 server"
-    }
-  ],
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Drink API database",
+      "version": "1.0.0",
+      "description": "This is an API with over 500 different drinks"
+    },
+    "servers": [
+      {
+        "url": "/api/v1.0.0",
+        "description": "Group 5 server"
+      }
+    ],
   "paths": {
-    "/api/v1/drink/": {
+    "/drink": {
       "get": {
         "summary": "Get all drinks from database",
         "description": "Full list of all drinks on the database",
@@ -21,20 +21,23 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#components/schemas/drinkResponseBody"
+            }
           }
         }
       },
       "post": {
         "summary": "Add a new drink to the database",
-        "description": "Have to own the API-key",
+        "description": "Post data about a new drink with different ingredients to the database",
         "requestBody": {
-          "description": "Requesting drink object",
+          "description": "A drink request object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/drinkRequestBody"
+                  "$ref": "#/components/schemas/drinkRequestBody"
               }
             }
           }
@@ -46,31 +49,56 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/components/schemas/drinkResponseBody"
+              "$ref": "#/components/schemas/drinkObject"
             }
           },
           "400": {
-            "description": "'Status':'Error, ingredients or name is missing'",
-            "schema": {
-              "$ref": "#/components/schemas/drinkErrorResponse"
+            "description": "Request data error",
+            "schemas": {
+              "$ref": "#components/schemas/errorObject"
+            }
+          }
+        }
+      }
+    },
+    "/drink/{id}": {
+      "get": {
+        "summary": "Get a drink with a given id",
+        "description": "Find your favourite drink with the help of the id",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the drink that we want to match",
+          "schema": {
+            "$ref": "#components/schemas/id"
+          }
+      }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/drinkObject"
+                }
+              }
             }
           }
         }
       },
       "put": {
-        "summary": "Change the id number",
-        "description": "If you have to change any drinks id number on the database",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "ID of the drink that we want to match",
-            "schema": {
-              "$ref": "#components/schemas/id"
-            }
+        "summary": "Change a drink with a given id",
+        "description": "If you like to change any drink in the database",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the drink that we want to match",
+          "schema": {
+            "$ref": "#components/schemas/id"
           }
-        ],
+      }],
         "responses": {
           "200": {
             "description": "OK",
@@ -83,11 +111,21 @@
             }
           },
           "400": {
-            "description": "'Status':'Error, drink id is missing'",
+            "description": "Content-type must be application/json",
             "content": {
-              "application/json": {
+              "application/json":{
                 "schema": {
-                  "$ref": "#components/schemas/errorobject"
+                  "$ref": "#components/schemas/errorObject"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json":{
+                "schema": {
+                  "$ref": "#components/schemas/errorObject"
                 }
               }
             }
@@ -95,49 +133,198 @@
         }
       },
       "delete": {
-        "description": "Delete a drink",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "drink_name",
-            "required": true,
-            "description": "Name of the drink you want to delete",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
-          "200": {
-            "description": "Ok",
-            "content": {
-              "application/json":{
-                "schema": {
-                  "$ref": "#components/schemas/deleteObject"
-                }
-              }
-            }
-          }
+
         }
       }
-    },
-    "/api/v1/drink/<alcohol>": {
-      "get": {
-      }
-    },
-    "/api/v1/user/": {
-      "get": {
-        "summary": "Get access to all users",
-        "description": "Find the right user from the database",
-        "parameters": []
-      }
-    },
-    "/api/v1/user/<user_id>": {
-      "get": {
-        "summary": "Get the user by id",
-        "description": "Find the right user by searching from their id"
+    }
+  },
+  "components": {
+    "schemas": {
+      "id": {
+         "properties":{
+           "id": {
+             "type": "string",
+             "description": "ID of any given drink"
+           }
+         }
+
       },
-      "put": {
+      "drinkObject": {
+        "type": "object",
+        "description": "Drink objects",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The id of the drink"
+          },
+          "Strdrink": {
+            "type": "string",
+            "description": "The name of the drink"
+          },
+          "Stralcoholic": {
+            "type": "string",
+            "description": "Alocoholic or Non-alcoholic"
+          },
+          "Strcategory": {
+            "type": "string",
+            "description": "Drink category"
+          },
+          "Strglass": {
+            "type": "string",
+            "description": "Type of glass"
+          },
+          "Strinstructions": {
+            "type": "string",
+            "description": "Instructions on how to make the drink"
+          },
+          "Stringredient1": {
+            "type": "string",
+            "description": "Ingredient 1"
+          },
+          "Stringredient2": {
+            "type": "string",
+            "description": "Ingredient 2"
+          },
+          "Stringredient3": {
+            "type": "string",
+            "description": "Ingredient 3"
+          },
+          "Stringredient4": {
+            "type": "string",
+            "description": "Ingredient 4"
+          },
+          "Stringredient5": {
+            "type": "string",
+            "description": "Ingredient 5"
+          },
+          "Stringredient6": {
+            "type": "string",
+            "description": "Ingredient 6"
+          },
+          "Stringredient7": {
+            "type": "string",
+            "description": "Ingredient 7"
+          },
+          "Stringredient8": {
+            "type": "string",
+            "description": "Ingredient 8"
+          },
+          "Stringredient9": {
+            "type": "string",
+            "description": "Ingredient 9"
+          },
+          "Stringredient10": {
+            "type": "string",
+            "description": "Ingredient 10"
+          },
+          "Stringredient11": {
+            "type": "string",
+            "description": "Ingredient 11"
+          },
+          "Stringredient12": {
+            "type": "string",
+            "description": "Ingredient 12"
+          },
+          "Strdrinkthumb": {
+            "type": "string",
+            "description": "Picture of the drink(URL)"
+          }
+        }
+      },
+      "drinkResponseBody": {
+        "type": "array",
+        "description": "An array of drinkObjects"
+
+      },
+      "drinkRequestBody": {
+        "type": "object",
+        "description": "A drink without an id",
+        "properties": {
+          "Strdrink": {
+            "type": "string",
+            "description": "The name of the drink"
+          },
+          "Stralcoholic": {
+            "type": "string",
+            "description": "Alocoholic or Non-alcoholic"
+          },
+          "Strcategory": {
+            "type": "string",
+            "description": "Drink category"
+          },
+          "Strglass": {
+            "type": "string",
+            "description": "Type of glass"
+          },
+          "Strinstructions": {
+            "type": "string",
+            "description": "Instructions on how to make the drink"
+          },
+          "Stringredient1": {
+            "type": "string",
+            "description": "Ingredient 1"
+          },
+          "Stringredient2": {
+            "type": "string",
+            "description": "Ingredient 2"
+          },
+          "Stringredient3": {
+            "type": "string",
+            "description": "Ingredient 3"
+          },
+          "Stringredient4": {
+            "type": "string",
+            "description": "Ingredient 4"
+          },
+          "Stringredient5": {
+            "type": "string",
+            "description": "Ingredient 5"
+          },
+          "Stringredient6": {
+            "type": "string",
+            "description": "Ingredient 6"
+          },
+          "Stringredient7": {
+            "type": "string",
+            "description": "Ingredient 7"
+          },
+          "Stringredient8": {
+            "type": "string",
+            "description": "Ingredient 8"
+          },
+          "Stringredient9": {
+            "type": "string",
+            "description": "Ingredient 9"
+          },
+          "Stringredient10": {
+            "type": "string",
+            "description": "Ingredient 10"
+          },
+          "Stringredient11": {
+            "type": "string",
+            "description": "Ingredient 11"
+          },
+          "Stringredient12": {
+            "type": "string",
+            "description": "Ingredient 12"
+          },
+          "Strdrinkthumb": {
+            "type": "string",
+            "description": "Picture of the drink(URL)"
+          }
+
+        }
+      },
+      "errorObject": {
+        "type": "object",
+        "description": "An object describing an error",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "The reason for the described"
+          }
+        }
       }
     }
   }
