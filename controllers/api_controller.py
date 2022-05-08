@@ -87,6 +87,18 @@ def delete_drinks(api_key, drink_name):
     return
 
 
+def delete_one_drink(drink_id):
+    """
+    Deletes the drink with the given drink_id
+    :param drink_id:
+    :return: The drink that has been deleted from the db
+    """
+    temp = Drinks.query.filter_by(index=drink_id).first()
+    db.session.delete(Drinks.query.filter_by(index=drink_id).first())
+    db.session.commit()
+    return temp
+
+
 def generate_api_key():
     key_length = 15
     # Creates a string that contains random characters from the alphabet and digits 0-9

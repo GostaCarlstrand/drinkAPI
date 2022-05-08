@@ -2,7 +2,7 @@ import json
 from functools import wraps
 from flask import Blueprint, request, Response, jsonify
 from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
-    create_drink, modify_user_drink, remove_none
+    create_drink, modify_user_drink, remove_none, delete_one_drink
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
@@ -52,13 +52,12 @@ def authorize_modify_db(f):
         # Extracted from the params in the api request
         data = request.json
         key = request.headers.get('api_key')
-        if 'drink_id' in data:
-            if not isinstance(data['drink_id'], int):
-                response = {
-                    'Status': "Error, drink_id must be a number"
-                }
-                return Response(json.dumps(response), 400, content_type='application/json')
         drink_id = data['drink_id']
+        if not isinstance(drink_id, int):
+            response = {
+                'Status': "Error, drink_id must be a number"
+            }
+            return Response(json.dumps(response), 400, content_type='application/json')
         # Can be changed depending on what the request looks like
         if not access_to_modify(key, drink_id):
             response = {
@@ -79,18 +78,20 @@ def before_request():
 
 
 @api_blueprint.delete('/api/v1/drink/')
-# Do not work atm @authorize_modify_db
-def delete_all_drinks():
+@authorize_modify_db
+def delete_drink():
     """
-    Deletes drinks from the user, only drinks with the same name are affected
+    Delete the drink with the given drink id
     :return:
     """
     data = request.json
-    # Drink that is passed in the query string
-    api_key = request.headers.get('api_key')
-    drink_name = data['name']
-    delete_drinks(api_key, drink_name)
-    return Response("'Status':'Deletion succeeded'", 200, content_type='application/json')
+    drink_id = data['drink_id']
+    deleted_drink = delete_one_drink(drink_id).__dict__
+    deleted_drink.pop("_sa_instance_state")
+    response = {
+        f"'Deleted': '{json.dumps(deleted_drink)}'"
+    }
+    return Response(response, 200, content_type='application/json')
 
 
 @api_blueprint.put('/api/v1/drink/')
