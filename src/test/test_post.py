@@ -1,21 +1,29 @@
 """
-Create POST endpoint, add new drinks to the database
+Unit tests for POST end-point
 """
-from app import create_app
 import pytest
+from app import create_app
 
 @pytest.fixture
 def client():
+    """
+    Test fixture for api client
+    :return: yields a test client
+    """
     app = create_app()
-    # Testläge
     app.config['TESTING'] = True
 
-    # Test client
+
     with app.app_context():
         with app.test_client() as api_client:
             yield api_client
 
-# Nedan kommer köra ovan(client). Yield är samma som return men istället för att stanna, kör den om o om igen.
+
 def test_post(client):
-    response = client.get("/user")
+    """
+    Test the data from a call to the POST end-point
+    :param client: An app test client from the fixture
+    :return: None
+    """
+    response = client.get("/admin/drinks/")
     assert response.status_code == 200
