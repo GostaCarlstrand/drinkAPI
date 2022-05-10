@@ -125,16 +125,7 @@ def get_all_drink():
         list_drinks.append(drink.__dict__)
 
     print()
-    return jsonify({'Drinks': list_drinks,
-                    'links': [
-                        {
-                            'href': '/drink/alcohol',
-                            'rel': 'self',
-                            'type': ["GET", "POST", "PUT", "DELETE"]
-                        }
-                    ]
-
-                    })
+    return jsonify({'Drinks': list_drinks})
 
 
 @api_blueprint.get('/api/v1/drink/<alcohol>')
