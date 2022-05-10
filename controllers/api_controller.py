@@ -3,7 +3,7 @@ import string
 import random
 from app import db
 from models import Drinks, DataUsage, User
-from sqlalchemy import and_, or_, not_
+from sqlalchemy import or_
 
 
 def get_all_drinks():
@@ -66,7 +66,8 @@ def api_usage(api_key, endpoint):
     else:
         total_requests = total_requests.total_requests + 1
 
-    db.session.add(DataUsage(endpoint=endpoint, user_id=user.id, timestamp=date, total_requests=total_requests))
+    db.session.add(DataUsage(endpoint=endpoint, user_id=user.id,
+                             timestamp=date, total_requests=total_requests))
     db.session.commit()
     return
 
@@ -132,7 +133,6 @@ def create_drink(data, api_key):
     drink.strDrink = data['name']
     db.session.add(drink)
     db.session.commit()
-    return
 
 
 def get_drink_by_id(drink_id):
@@ -204,14 +204,12 @@ def modify_user_drink(data):
             update({str_builder: ingredient})
             continue
     db.session.commit()
-    return
 
 
 def remove_none(obj):
     if isinstance(obj, (list, tuple, set)):
         return type(obj)(remove_none(x) for x in obj if x is not None)
-    elif isinstance(obj, dict):
+    if isinstance(obj, dict):
         return type(obj)((remove_none(k), remove_none(v))
                          for k, v in obj.items() if k is not None and v is not None)
-    else:
-        return obj
+    return obj

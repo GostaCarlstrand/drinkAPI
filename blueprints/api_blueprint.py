@@ -1,6 +1,6 @@
 import json
 from functools import wraps
-from flask import Blueprint, request, Response, jsonify
+from flask import Blueprint, request, Response, jsonify, url_for
 from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
     create_drink, modify_user_drink, remove_none, delete_one_drink
 from controllers.user_controller import access_to_modify
@@ -82,7 +82,7 @@ def before_request():
 def delete_drink():
     """
     Delete the drink with the given drink id
-    :return:
+    :return: A response that includes data about the drink that has been deleted
     """
     data = request.json
     drink_id = data['drink_id']
@@ -124,7 +124,17 @@ def get_all_drink():
         drink.__dict__.pop('_sa_instance_state')
         list_drinks.append(drink.__dict__)
 
-    return jsonify({'Drinks': list_drinks})
+    print()
+    return jsonify({'Drinks': list_drinks,
+                    'links': [
+                        {
+                            'href': '/drink/alcohol',
+                            'rel': 'self',
+                            'type': ["GET", "POST", "PUT", "DELETE"]
+                        }
+                    ]
+
+                    })
 
 
 @api_blueprint.get('/api/v1/drink/<alcohol>')
@@ -149,6 +159,3 @@ def get_alcohol(alcohol):
     clean_list = remove_none(output)
 
     return jsonify({'Drinks': clean_list})
-
-
-

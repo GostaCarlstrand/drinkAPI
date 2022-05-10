@@ -1,3 +1,7 @@
+"""
+Blueprint that contains endpoints related to user data
+"""
+
 from flask import Blueprint, jsonify, request, Response
 from app import db
 from blueprints.api_blueprint import authorize_api_key
@@ -6,11 +10,16 @@ from controllers.user_controller import get_all_users, get_user_by_key, user_che
 from models import User
 
 
+
 user_blueprint = Blueprint('user_blueprint', __name__)
 
 @user_blueprint.before_request
 @authorize_api_key
 def before_request():
+    """
+    Function that is called before every request
+    :return: No return value
+    """
     endpoint = request.base_url
     api_key = request.headers.get('api_key')
     api_usage(api_key, endpoint)
@@ -18,6 +27,10 @@ def before_request():
 
 @user_blueprint.get('/api/v1/user/')
 def get_users():
+    """
+    Get all API users
+    :return: List of users
+    """
     list_users = []
     all_users = get_all_users()
     for user in all_users:
@@ -29,12 +42,22 @@ def get_users():
 
 @user_blueprint.get('/api/v1/user/<user_id>')
 def profile_get_user(user_id):
+    """
+    Get a user by id
+    :param user_id:
+    :return: One user
+    """
     user = user_check(user_id)
     return jsonify([User.serialize(user)])
 
 
 @user_blueprint.put('/api/v1/user/<user_id>')
 def update_user(user_id):
+    """
+    Change details about a user
+    :param user_id:
+    :return: A response with a status message
+    """
     user = user_check(user_id)
     api_key = request.headers.get('api_key')
     user_key = get_user_by_key(api_key)
@@ -51,4 +74,3 @@ def update_user(user_id):
         db.session.commit()
 
     return Response("'Status':'User updated'", 200, content_type='application/json')
-
