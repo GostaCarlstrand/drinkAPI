@@ -61,7 +61,7 @@
         }
       }
     },
-    "/drink/{id}": {
+    "/{id}": {
       "get": {
         "summary": "Get a drink with a given id",
         "description": "Find your favourite drink with the help of the id",
