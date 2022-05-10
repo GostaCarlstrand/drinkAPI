@@ -8,20 +8,25 @@
 <body>
     <h1> Sign up for api key</h1>
     <div>
-  <form action="{{ url_for('dev_blueprint.sign_up') }}" method="post">
+  <form action="{{ url_for('open_blueprint.sign_up') }}" method="post">
     <label for="fname">Full name</label>
     <input type="text" id="fname" name="fullname" placeholder="Your full name..">
-
     <label for="admin">Want to be admin?</label>
     <select id="admin" name="admin">
       <option value="1">Yes</option>
       <option value="0">No</option>
     </select>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
     <input type="submit" value="Submit">
   </form>
 
-<button type="button" onclick="window.location.href='{{ url_for('dev_blueprint.import_data') }}';">Import data</button>
+<button type="button" onclick="window.location.href='{{ url_for('open_blueprint.import_data') }}';">Import data</button>
 
 </div>
 </body>
