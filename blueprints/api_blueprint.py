@@ -85,7 +85,7 @@ def before_request():
 def delete_drink():
     """
     Delete the drink with the given drink id
-    :return:
+    :return: A response that includes data about the drink that has been deleted
     """
     data = request.json
     drink_id = data['drink_id']
@@ -127,6 +127,7 @@ def get_all_drink():
         drink.__dict__.pop('_sa_instance_state')
         list_drinks.append(drink.__dict__)
 
+    print()
     return jsonify({'Drinks': list_drinks})
 
 

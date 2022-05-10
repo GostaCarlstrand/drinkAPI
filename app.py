@@ -22,6 +22,7 @@ SWAGGER_BLUEPRINT = get_swaggerui_blueprint (
 
 )
 
+
 def create_app():
     """
     Factory function for flask application
@@ -45,6 +46,7 @@ def create_app():
     app.register_blueprint(open_blueprint)
     app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
     return app
+
 
 if __name__ == "__main__":
     create_app().run()
