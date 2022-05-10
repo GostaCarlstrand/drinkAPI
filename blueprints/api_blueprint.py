@@ -4,12 +4,11 @@ Integration of the API
 import json
 from functools import wraps
 from flask import Blueprint, request, Response, jsonify
-from controllers.api_controller import api_usage, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
-create_drink, modify_user_drink, remove_none, delete_one_drink
+from controllers.api_controller import api_usage, confirm_api_key, get_drinks_by_alcohol, \
+get_all_drinks, create_drink, modify_user_drink, remove_none, delete_one_drink
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)
-
 
 """
 name - name of drink
@@ -21,14 +20,14 @@ ingredients - A list with the ingredients needed to make the drink
 """
 
 
-def authorize_api_key(f):
+def authorize_api_key(func):
     """
     A decorator to check that the request has a valid API-key
     :param f:
     :return: wrapper function
     """
 
-    @wraps(f)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         # Extracted from the params in the api request
         key = request.headers.get('api_key')
@@ -38,19 +37,19 @@ def authorize_api_key(f):
                 'Result': "Your API key is invalid"
             }
             return Response(json.dumps(response), 401, content_type='application/json')
-        return f(*args, **kwargs)
+        return func(*args, **kwargs)
 
     return wrapper
 
 
-def authorize_modify_db(f):
+def authorize_modify_db(func):
     """
     A decorator to check that the user has access to modify the drink
     :param f:
     :return: wrapper function
     """
 
-    @wraps(f)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         # Extracted from the params in the api request
         data = request.json
@@ -67,7 +66,7 @@ def authorize_modify_db(f):
                 'Result': "No drink to modify"
             }
             return Response(json.dumps(response), 401, content_type='application/json')
-        return f(*args, **kwargs)
+        return func(*args, **kwargs)
 
     return wrapper
 
@@ -75,6 +74,9 @@ def authorize_modify_db(f):
 @api_blueprint.before_request
 @authorize_api_key
 def before_request():
+    """
+    Function that is called before an api request
+    """
     endpoint = request.base_url
     api_key = request.headers.get('api_key')
     api_usage(api_key, endpoint)
@@ -100,27 +102,39 @@ def delete_drink():
 @api_blueprint.put('/api/v1/drink/')
 @authorize_modify_db
 def modify_drink():
+    """
+    Allows the user to modify any drink that the user has contributed
+    :return: Response with status code
+    """
     data = request.json
     if 'drink_id' in data:
         modify_user_drink(data)
-        return Response("'Status':'Modification succeeded'", 200, content_type='application/json')
-    else:
-        return Response("'Status':'Error, drink id is missing'", 400, content_type='application/json')
-
+        return Response("'Status':'Modification succeeded'",
+                        200, content_type='application/json')
+    return Response("'Status':'Error, drink id is missing'",
+                        400, content_type='application/json')
 
 @api_blueprint.post('/api/v1/drink/')
 def post_new_drink():
+    """
+    Allows the user the add a new drink to the db
+    :return: Response with status code
+    """
     data = request.json
     api_key = request.headers.get('api_key')
     if 'ingredients' in data and 'name' in data:
         create_drink(data, api_key)
-        return Response("'Status':'Added drink to database'", 200, content_type='application/json')
-    else:
-        return Response("'Status':'Error, ingredients or name is missing'", 400, content_type='application/json')
-
+        return Response("'Status':'Added drink to database'",
+                        200, content_type='application/json')
+    return Response("'Status':'Error, ingredients or name is missing'",
+                        400, content_type='application/json')
 
 @api_blueprint.get('/api/v1/drink/')
 def get_all_drink():
+    """
+    To get all drinks in the db
+    :return: List with drinks
+    """
     list_drinks = []
     all_drinks = get_all_drinks()
     for drink in all_drinks:
@@ -133,6 +147,11 @@ def get_all_drink():
 
 @api_blueprint.get('/api/v1/drink/<alcohol>')
 def get_alcohol(alcohol):
+    """
+    Get data on drinks with given name
+    :param alcohol:
+    :return: List with drinks
+    """
     alcohol = get_drinks_by_alcohol(alcohol)
 
     output = []
@@ -144,10 +163,13 @@ def get_alcohol(alcohol):
         alco_data['category'] = alco.strCategory
         alco_data['glass'] = alco.strGlass
         alco_data['instructions'] = alco.strInstructions
-        alco_data['ingredients'] = [alco.strIngredient1, alco.strIngredient2, alco.strIngredient3, alco.strIngredient4,
-                                    alco.strIngredient5, alco.strIngredient6, alco.strIngredient7, alco.strIngredient8,
-                                    alco.strIngredient9, alco.strIngredient10, alco.strIngredient11,
-                                    alco.strIngredient12]
+        alco_data['ingredients'] = \
+        [alco.strIngredient1, alco.strIngredient2,
+         alco.strIngredient3, alco.strIngredient4,
+         alco.strIngredient5, alco.strIngredient6,
+         alco.strIngredient7, alco.strIngredient8,
+         alco.strIngredient9, alco.strIngredient10,
+         alco.strIngredient11, alco.strIngredient12]
         output.append(alco_data)
 
     clean_list = remove_none(output)

@@ -88,15 +88,15 @@ def check_user_keys(user_info):
 
     for key in user_info:
         if key not in accepted_keys:
-            return Response(json.dumps({'Error': f'The key {key} is not accepted in the json request'}),
-                            400,
-                            content_type='application/json')
+            return Response(json.dumps({'Error': f'The key '
+                                                 f'{key} is not accepted in the json request'}),
+                            400, content_type='application/json')
 
     for key in accepted_keys:
         if key not in user_info:
-            return Response(json.dumps({'Error': f'The required key {key} is not present in the json request'}),
-                            400,
-                            content_type='application/json')
+            return Response(json.dumps({'Error': f'The required key '
+                                                 f'{key} is not present in the json request'}),
+                            400, content_type='application/json')
     return None
 
 
@@ -109,7 +109,8 @@ def user_check(user_id):
     if user_id.isdigit():
         user_id = int(user_id)
     else:
-        return Response(json.dumps({'Error': 'Id must be an integer'}), 400, content_type='application/json')
+        return Response(json.dumps({'Error': 'Id must be an integer'}),
+                        400, content_type='application/json')
 
     user_id = get_user_by_id(user_id)
 
