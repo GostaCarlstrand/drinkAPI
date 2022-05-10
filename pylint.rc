@@ -1,3 +1,31 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@GostaCarlstrand 
+artheadsweden
+/
+small_api_with_deploy
+Public
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+small_api_with_deploy/pylint.rc
+@artheadsweden
+artheadsweden Added second route and wrote soem unit tests
+Latest commit 7fd7a2e 19 days ago
+ History
+ 1 contributor
+587 lines (424 sloc)  18.9 KB
+   
 [MASTER]
 
 # A comma-separated list of package or module names from where C extensions may
@@ -53,7 +81,7 @@ persistent=yes
 
 # Minimum Python version to use for version dependent checks. Will default to
 # the version used to run pylint.
-py-version=3.9
+py-version=3.10
 
 # Discover python modules and packages in the file system subtree.
 recursive=no
@@ -92,16 +120,11 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-symbolic-message-instead,
         redefined-outer-name,
-        trailing-whitespace,
-        too-many-branches,
-        invalid-name,
-        too-few-public-methods,
-        too-many-instance-attributes,
-        line-too-long,
-        no-else-return,
+        unused-import,
+        import-outside-toplevel,
         no-member,
-        import-outside-toplevel
-
+        too-many-statements,
+        too-many-branches
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -594,3 +617,16 @@ preferred-modules=
 # "BaseException, Exception".
 overgeneral-exceptions=BaseException,
                        Exception
+© 2022 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Loading complete
