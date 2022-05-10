@@ -1,5 +1,11 @@
+"""
+Initializing controllers attribute
+"""
 def main():
-    pass
+    """
+    Initializing controllers attribute
+    """
+
 
 
 if __name__ == "__main__":

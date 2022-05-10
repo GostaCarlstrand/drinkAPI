@@ -1,8 +1,11 @@
+"""
+Integration of the API
+"""
 import json
 from functools import wraps
-from flask import Blueprint, request, Response, jsonify, url_for
-from controllers.api_controller import api_usage, delete_drinks, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
-    create_drink, modify_user_drink, remove_none, delete_one_drink
+from flask import Blueprint, request, Response, jsonify
+from controllers.api_controller import api_usage, confirm_api_key, get_drinks_by_alcohol, get_all_drinks, \
+create_drink, modify_user_drink, remove_none, delete_one_drink
 from controllers.user_controller import access_to_modify
 
 api_blueprint = Blueprint('api_blueprint', __name__)

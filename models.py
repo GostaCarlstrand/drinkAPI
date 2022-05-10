@@ -1,8 +1,14 @@
+"""
+Collection in DB
+"""
 from flask_admin.contrib.sqla import ModelView
 from app import db, admin
 
 
 class User(db.Model):
+    """
+    User database
+    """
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(150))
     admin = db.Column(db.BOOLEAN, default=False)
@@ -10,6 +16,9 @@ class User(db.Model):
 
 
 class Drinks(db.Model):
+    """
+    Drinks database
+    """
     __tablename__ = "drinks"
     index = db.Column(db.Integer, primary_key=True, autoincrement=True)
     strDrink = db.Column(db.String(100))
@@ -45,6 +54,9 @@ class Drinks(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def assign_ingredients(self, ingredients):
+        """
+        Ingredient assignment
+        """
         for count, ingredient in enumerate(ingredients):
             count += 1
             if count == 1:
@@ -86,6 +98,9 @@ class Drinks(db.Model):
 
 
 class DataUsage(db.Model):
+    """
+    Use of data
+    """
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     endpoint = db.Column(db.String(150))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -94,6 +109,9 @@ class DataUsage(db.Model):
 
 
 class MyModelView(ModelView):
+    """
+    Data to be viewed on screen
+    """
     can_view_details = True
     can_set_page_size = True
     can_export = True
@@ -102,4 +120,3 @@ class MyModelView(ModelView):
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Drinks, db.session))
 admin.add_view(MyModelView(DataUsage, db.session))
-
