@@ -5,9 +5,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_swagger_ui import get_swaggerui_blueprint
-from blueprints.api_blueprint import api_blueprint
-from blueprints.user_blueprint import user_blueprint
-from blueprints.open_blueprint import open_blueprint
+
 
 db = SQLAlchemy()
 admin = Admin()
@@ -37,6 +35,10 @@ def create_app():
 
     admin.init_app(app)
     db.init_app(app)
+
+    from blueprints.api_blueprint import api_blueprint
+    from blueprints.user_blueprint import user_blueprint
+    from blueprints.open_blueprint import open_blueprint
 
     app.register_blueprint(api_blueprint)
     app.register_blueprint(user_blueprint)

@@ -7,9 +7,7 @@ import random
 from app import db
 from models import Drinks, DataUsage, User
 from sqlalchemy import and_, or_, not_
-from controllers.user_controller import get_user_requests
-from controllers.user_controller import get_user_by_key
-from controllers.user_controller import get_user_drinks
+
 
 def get_all_drinks():
     """
@@ -38,7 +36,7 @@ def get_drinks_by_alcohol(alcohol_data):
     """
 
 
-    Drinks.query.filter(
+    query =  Drinks.query.filter(
         or_(
             Drinks.index.like(alcohol_data),
             Drinks.strDrink.like(alcohol_data),
@@ -51,6 +49,7 @@ def get_drinks_by_alcohol(alcohol_data):
             Drinks.strIngredient6.like(alcohol_data),
         )
     )
+    return query
 
 
 
@@ -59,7 +58,7 @@ def api_usage(api_key, endpoint):
     Stores the amount of api calls that the user has made
     :param (api_key, endpoint)
     """
-
+    from controllers.user_controller import get_user_requests, get_user_by_key
     user = get_user_by_key(api_key)
     date = datetime.now()
     # Data amount should be calculated somehow
@@ -72,7 +71,7 @@ def api_usage(api_key, endpoint):
 
     db.session.add(DataUsage(endpoint=endpoint, user_id=user.id, timestamp=date, total_requests=total_requests))
     db.session.commit()
-    return
+
 
 
 def delete_drinks(api_key, drink_name):
@@ -82,7 +81,7 @@ def delete_drinks(api_key, drink_name):
     :param drink_name:
     :return:
     """
-
+    from controllers.user_controller import get_user_drinks, get_user_by_key
     user = get_user_by_key(api_key)
     drinks = get_user_drinks(user)
     [db.session.delete(drink) for drink in drinks if drink.strDrink == drink_name]
