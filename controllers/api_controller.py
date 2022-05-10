@@ -1,10 +1,15 @@
+"""
+Data on all drinks
+"""
 from datetime import datetime
 import string
 import random
 from app import db
 from models import Drinks, DataUsage, User
 from sqlalchemy import and_, or_, not_
-
+from controllers.user_controller import get_user_requests
+from controllers.user_controller import get_user_by_key
+from controllers.user_controller import get_user_drinks
 
 def get_all_drinks():
     """
@@ -32,7 +37,8 @@ def get_drinks_by_alcohol(alcohol_data):
     :return: List with alcohol or nonalcoholic drinks
     """
 
-    query = Drinks.query.filter(
+
+    Drinks.query.filter(
         or_(
             Drinks.index.like(alcohol_data),
             Drinks.strDrink.like(alcohol_data),
@@ -45,17 +51,15 @@ def get_drinks_by_alcohol(alcohol_data):
             Drinks.strIngredient6.like(alcohol_data),
         )
     )
-    return query
+
 
 
 def api_usage(api_key, endpoint):
     """
     Stores the amount of api calls that the user has made
     :param (api_key, endpoint)
-    :return:
     """
-    from controllers.user_controller import get_user_by_key
-    from controllers.user_controller import get_user_requests
+
     user = get_user_by_key(api_key)
     date = datetime.now()
     # Data amount should be calculated somehow
@@ -78,8 +82,7 @@ def delete_drinks(api_key, drink_name):
     :param drink_name:
     :return:
     """
-    from controllers.user_controller import get_user_by_key
-    from controllers.user_controller import get_user_drinks
+
     user = get_user_by_key(api_key)
     drinks = get_user_drinks(user)
     [db.session.delete(drink) for drink in drinks if drink.strDrink == drink_name]

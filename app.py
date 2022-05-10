@@ -38,8 +38,6 @@ def create_app():
     admin.init_app(app)
     db.init_app(app)
 
-
-
     app.register_blueprint(api_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(open_blueprint)

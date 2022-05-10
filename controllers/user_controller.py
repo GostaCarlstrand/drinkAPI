@@ -1,3 +1,6 @@
+"""
+Data on users
+"""
 import json
 from flask import Response
 from app import db
@@ -111,10 +114,6 @@ def user_check(user_id):
     user_id = get_user_by_id(user_id)
 
     if not user_id:
-        return Response(json.dumps({'Error': f'User is not present in the database'}),
+        return Response(json.dumps({'Error': 'User is not present in the database'}),
                         404, content_type='application/json')
     return user_id
-
-
-
-
