@@ -6,9 +6,9 @@ from flask import Blueprint, jsonify, request, Response
 from app import db
 from blueprints.api_blueprint import authorize_api_key
 from controllers.api_controller import api_usage
-from controllers.user_controller import get_all_users, get_user_by_key, user_check, check_user_keys
+from controllers.user_controller import get_all_users, get_user_by_key,\
+user_check, check_user_keys, get_user_drinks, get_user_by_id
 from models import User
-
 
 
 user_blueprint = Blueprint('user_blueprint', __name__)
@@ -48,7 +48,40 @@ def profile_get_user(user_id):
     :return: One user
     """
     user = user_check(user_id)
-    return jsonify([User.serialize(user)])
+    user = user.__dict__
+    links = {'links': [
+        {
+            'description': 'Modify any user data',
+            'href': 'self',
+            'rel': 'user_id',
+            'type': ["GET", "PUT"]
+        },
+        {
+            'description': 'Get all drinks created by the user with the given user id',
+            'href': 'user_id/drinks',
+            'rel': 'user_id',
+            'type': "GET"
+        }
+            ]
+            }
+    user.pop('_sa_instance_state')
+    return jsonify({'user': user}, links)
+
+
+@user_blueprint.get('/api/v1/user/<user_id>/drinks')
+def profile_get_user_drinks(user_id):
+    """
+    Get all drinks that was created by the user with the given user id
+    :param user_id:
+    :return:
+    """
+    list_drinks = []
+    drinks = get_user_drinks(get_user_by_id(int(user_id)))
+    for drink in drinks:
+        drink.__dict__.pop('_sa_instance_state')
+        list_drinks.append(drink.__dict__)
+
+    return jsonify({'drinks': list_drinks})
 
 
 @user_blueprint.put('/api/v1/user/<user_id>')

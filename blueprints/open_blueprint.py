@@ -32,7 +32,7 @@ def sign_up():
     user = User.query.filter_by(name=name).first()
     if user:
         flash('Name already in use', 'error')
-        return redirect(url_for('user_blueprint.index'))
+        return redirect(url_for('open_blueprint.index'))
 
     admin = int(request.form["admin"])
     api_key = insert_user({'name': name, 'admin': admin})
