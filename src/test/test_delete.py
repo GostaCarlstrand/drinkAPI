@@ -25,5 +25,6 @@ def test_delete(client):
     :param client: An app test client from the fixture
     :return: None
     """
-    response = client.delete("/admin/drinks/")
+    api_key = {"api_key": "I3WBR11CQ6NFZDI"}
+    response = client.delete("/api/v1/drink/", headers=api_key)
     assert response.status_code == 200

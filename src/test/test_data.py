@@ -1,0 +1,49 @@
+"""
+Unit tests for data
+"""
+import pytest
+
+from app import create_app
+
+
+@pytest.fixture(scope='module')
+def client():
+    """
+    Test fixture for api client
+    :return: yields a test client
+    """
+    app = create_app()
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db_test.sqlite'
+    with app.app_context():
+        with app.test_client() as api_client:
+            yield api_client
+
+
+def test_data_one(client):
+    """
+    Test the data from a call /1
+    :param client: An app test client
+    :return: Data on a drink
+    """
+    x = {"api_key": "I3WBR11CQ6NFZDI"}
+    rv = client.get('/api/v1/drink/1', headers=x)
+    assert rv.json == {'Drinks': [{'alcohol': 'Alcoholic',
+                                   'category': 'Shot', 'glass': 'Old-fashioned glass',
+                                   'id': 1, 'ingredients': ['Absolut Kurant', 'Grand Marnier',
+                                                            'Chambord raspberry liqueur', 'Midori melon liqueur',
+                                                            'Malibu rum',
+                                                            'Amaretto', 'Cranberry juice', 'Pineapple juice'],
+                                   'instructions': 'Shake ingredients in a mixing tin filled with ice cubes. Strain into a rocks glass.',
+                                   'name': '1-900-FUK-MEUP'}], }
+
+
+def test_data_alcohol(client):
+    """
+    Test the data from a call /<alcohol>
+    :param client: An app test client
+    :return: Data on drinks with alcohol
+    """
+    x = {"api_key": "I3WBR11CQ6NFZDI"}
+    rv = client.get('/api/v1/drink/<alcohol>', headers=x)
+    assert rv.json == {'Drinks': []}

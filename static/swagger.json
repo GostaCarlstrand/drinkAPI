@@ -12,7 +12,7 @@
       }
     ],
   "paths": {
-    "/drink": {
+    "/drinks": {
       "get": {
         "summary": "Get all drinks from database",
         "description": "Full list of all drinks on the database",
@@ -61,7 +61,7 @@
         }
       }
     },
-    "/drink/{id}": {
+    "/{id}": {
       "get": {
         "summary": "Get a drink with a given id",
         "description": "Find your favourite drink with the help of the id",
