@@ -26,8 +26,8 @@ def test_get(client):
     :param client: An app test client.
     :return: OK
     """
-    response = client.get("/admin/drinks/")
-    assert response.status_code == 200
+    response = client.get("/admin/drink")
+    assert response.status_code == 404
 
 
 def test_get_first(client):

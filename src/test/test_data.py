@@ -51,26 +51,7 @@ def test_data_alcohol(client):
     rv = client.get('/api/v1/drink/<alcohol>', headers=x)
     assert rv.json == {'Drinks': []}
 
-def test_get_drink_name( client):
 
-    api_key = "I3WBR11CQ6NFZDI"
-    data = 'sqlite:///db_test.sqlite'
-    drink = Drinks
-    if 'alcohol' in data:
-        drink.strAlcoholic = data['alcohol']
-    if 'category' in data:
-        drink.strCategory = data['category']
-    if 'glass' in data:
-        drink.strGlass = data['glass']
-    if 'instructions' in data:
-        drink.strInstructions = data['instructions']
-
-    drink.assign_ingredients(data['ingredients'])
-    user = get_user_by_key(api_key)
-    drink.user_id = user.id
-    drink.strDrink = data['name']
-    db.session.add(drink)
-    db.session.commit()
 
 
 

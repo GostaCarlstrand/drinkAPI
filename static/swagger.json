@@ -12,7 +12,7 @@
       }
     ],
   "paths": {
-    "/drink": {
+    "/drinks": {
       "get": {
         "summary": "Get all drinks from database",
         "description": "Full list of all drinks on the database",
