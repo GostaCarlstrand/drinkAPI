@@ -4,6 +4,8 @@ Unit tests for POST end-point
 import pytest
 from app import create_app
 
+
+
 @pytest.fixture
 def client():
     """
@@ -25,5 +27,6 @@ def test_post(client):
     :param client: An app test client from the fixture
     :return: None
     """
-    response = client.get("/admin/drinks/")
+    headers_dict = {"api_key": "I3WBR11CQ6NFZDI"}
+    response = client.post("/api/v1/drink/", headers=headers_dict)
     assert response.status_code == 200
