@@ -1,15 +1,9 @@
 """
 Unit tests for POST end-point
 """
-import json
-from unittest.mock import patch, Mock
-from nose.tools import assert_list_equal
 import pytest
-import requests
-from flask import request
-
 from app import create_app
-from controllers.user_controller import insert_user
+
 
 
 @pytest.fixture
@@ -33,8 +27,6 @@ def test_post(client):
     :param client: An app test client from the fixture
     :return: None
     """
-    x = {"api_key": "I3WBR11CQ6NFZDI"}
-    response = client.post("/api/v1/drink/", headers=x)
+    headers_dict = {"api_key": "I3WBR11CQ6NFZDI"}
+    response = client.post("/api/v1/drink/", headers=headers_dict)
     assert response.status_code == 200
-
-

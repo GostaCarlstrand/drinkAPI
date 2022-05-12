@@ -1,8 +1,9 @@
 """
 Unit tests for GET end-point
 """
-from app import create_app
 import pytest
+from app import create_app
+
 
 
 
@@ -54,8 +55,8 @@ def test_get_third(client):
     :param client: An app test client
     :return: Get all drinks. OK
     """
-    x = {"api_key": "I3WBR11CQ6NFZDI"}
-    response = client.get("/api/v1/drink/", headers=x)
+    headers_dict = {"api_key": "I3WBR11CQ6NFZDI"}
+    response = client.get("/api/v1/drink/", headers=headers_dict)
     assert response.status_code == 200
 
 def test_get_fourth(client):
@@ -64,10 +65,6 @@ def test_get_fourth(client):
     :param client: An app test client
     :return: Data on drinks. OK
     """
-    x = {"api_key": "I3WBR11CQ6NFZDI"}
-    response = client.get("/api/v1/drink/<alcohol>", headers=x)
+    headers_dict = {"api_key": "I3WBR11CQ6NFZDI"}
+    response = client.get("/api/v1/drink/<alcohol>", headers=headers_dict)
     assert response.status_code == 200
-
-
-
-

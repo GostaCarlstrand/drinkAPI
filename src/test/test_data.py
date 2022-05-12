@@ -1,20 +1,11 @@
 """
 Unit tests for data
 """
-import dataclasses
-import json
-from os import name
-from typing import Any
-from unittest import mock
 
-import pytest, pytest_flask
-from sqlalchemy.testing import db
 
-import app
-from app import create_app, admin
-from controllers.user_controller import get_user_by_key
+import pytest
+from app import create_app
 
-from models import Drinks, User
 
 
 @pytest.fixture(scope='module')
@@ -37,9 +28,14 @@ def test_data_one(client):
     :param client: An app test client
     :return: Data on a drink
     """
-    x = {"api_key": "I3WBR11CQ6NFZDI"}
-    rv = client.get('/api/v1/drink/1', headers=x)
-    assert rv.json == {'Drinks': [{'alcohol': 'Alcoholic','category': 'Shot','glass': 'Old-fashioned glass','id': 1,'ingredients': ['Absolut Kurant','Grand Marnier','Chambord raspberry liqueur','Midori melon liqueur','Malibu rum','Amaretto','Cranberry juice','Pineapple juice'],'instructions': 'Shake ingredients in a mixing tin filled with ice cubes. Strain into a rocks glass.','name': '1-900-FUK-MEUP'}],}
+    headers_dict = {"api_key": "I3WBR11CQ6NFZDI"}
+    headers_api = client.get('/api/v1/drink/1', headers=headers_dict)
+    assert headers_api.json == {'Drinks': [{'alcohol': 'Alcoholic','category': 'Shot',
+    'glass': 'Old-fashioned glass','id': 1,'ingredients':['Absolut Kurant',
+    'Grand Marnier','Chambord raspberry liqueur',
+    'Midori melon liqueur','Malibu rum','Amaretto','Cranberry juice','Pineapple juice'],
+    'instructions':'Shake ingredients in a mixing tin filled with ice cubes. Strain into a glass.',
+    'name': '1-900-FUK-MEUP'}],}
 
 def test_data_alcohol(client):
     """
@@ -47,26 +43,6 @@ def test_data_alcohol(client):
     :param client: An app test client
     :return: Data on drinks with alcohol
     """
-    x = {"api_key": "I3WBR11CQ6NFZDI"}
-    rv = client.get('/api/v1/drink/<alcohol>', headers=x)
-    assert rv.json == {'Drinks': []}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    headers_dict = {"api_key": "I3WBR11CQ6NFZDI"}
+    headers_api = client.get('/api/v1/drink/<alcohol>', headers=headers_dict)
+    assert headers_api.json == {'Drinks': []}

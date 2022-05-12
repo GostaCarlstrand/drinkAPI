@@ -2,8 +2,7 @@
 Unit tests for PUT end-point
 """
 import pytest
-from flask import request, Response
-
+from flask import request
 from app import create_app
 from controllers.api_controller import modify_user_drink
 
@@ -29,16 +28,6 @@ def test_put(client):
     :param client: An app test client from the fixture
     :return: None
     """
-    x = {"api_key": "Y5YO2YDQZV2AZPW"}
-    response = client.put("/api/v1/user/<user_id>", headers=x)
+    headers_dict = {"api_key": "Y5YO2YDQZV2AZPW"}
+    response = client.put("/api/v1/user/<user_id>", headers=headers_dict)
     assert response.status_code == 200
-
-def test_modify_drink(client):
-    data = request.json
-    if 'drink_id' in data:
-        modify_user_drink(data)
-        response = client.put('/api/v1/drink/')
-        assert response.status_code == 200
-    else:
-        response = client.put('/api/v1/drink/')
-        assert response.status_code == 400
