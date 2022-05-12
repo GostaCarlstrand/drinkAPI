@@ -1,8 +1,16 @@
 """
 Unit tests for POST end-point
 """
+import json
+from unittest.mock import patch, Mock
+from nose.tools import assert_list_equal
 import pytest
+import requests
+from flask import request
+
 from app import create_app
+from controllers.user_controller import insert_user
+
 
 @pytest.fixture
 def client():
@@ -25,5 +33,24 @@ def test_post(client):
     :param client: An app test client from the fixture
     :return: None
     """
-    response = client.get("/admin/drinks/")
+    x = {"api_key": "I3WBR11CQ6NFZDI"}
+    response = client.post("/api/v1/drink/", headers=x)
     assert response.status_code == 200
+
+@patch('blueprints.open_blueprint.sign_up.post')
+def test_data_post(client):
+    data = {
+        'name': 'Dan',
+        'admin': True,
+        'api_key': "I3WBR11CQ6NFZDI"
+    }
+    client.return_value = Mock(ok=True)
+    client.return_value.json.return_value = data
+
+    response = get_todos
+    assert_list_equal(response.json,data)
+    #x = {"api_key": "I3WBR11CQ6NFZDI"}
+    #api_key = insert_user({'name': 'Max', 'admin': True})
+    #response = client.post("/signup")
+    #assert response.status_code == 200
+
