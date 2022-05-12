@@ -110,7 +110,7 @@ def delete_drink():
     drink_id = data['drink_id']
     deleted_drink = delete_one_drink(drink_id).__dict__
     deleted_drink.pop("_sa_instance_state")
-    response = jsonify({'data': deleted_drink, 'links': hateoas_links()})
+    response = jsonify({'data': 'drink deleted', 'links': hateoas_links()})
     return response
 
 
