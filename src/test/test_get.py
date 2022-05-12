@@ -68,7 +68,6 @@ def test_get_fourth(client):
     response = client.get("/api/v1/drink/<alcohol>", headers=x)
     assert response.status_code == 200
 
-def test_data(client):
-    return client.test_get.py()
+
 
 

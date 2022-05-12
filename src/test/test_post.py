@@ -37,20 +37,4 @@ def test_post(client):
     response = client.post("/api/v1/drink/", headers=x)
     assert response.status_code == 200
 
-@patch('blueprints.open_blueprint.sign_up.post')
-def test_data_post(client):
-    data = {
-        'name': 'Dan',
-        'admin': True,
-        'api_key': "I3WBR11CQ6NFZDI"
-    }
-    client.return_value = Mock(ok=True)
-    client.return_value.json.return_value = data
-
-    response = get_todos
-    assert_list_equal(response.json,data)
-    #x = {"api_key": "I3WBR11CQ6NFZDI"}
-    #api_key = insert_user({'name': 'Max', 'admin': True})
-    #response = client.post("/signup")
-    #assert response.status_code == 200
 
