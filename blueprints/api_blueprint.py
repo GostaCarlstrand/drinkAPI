@@ -99,7 +99,7 @@ def hateoas_links():
     return links
 
 
-@api_blueprint.delete('/api/v1/drink/')
+@api_blueprint.delete('/api/v1/drinks/')
 @authorize_modify_db
 def delete_drink():
     """
@@ -114,7 +114,7 @@ def delete_drink():
     return response
 
 
-@api_blueprint.put('/api/v1/drink/')
+@api_blueprint.put('/api/v1/drinks/')
 @authorize_modify_db
 def modify_drink():
     """
@@ -127,7 +127,7 @@ def modify_drink():
     return response
 
 
-@api_blueprint.post('/api/v1/drink/')
+@api_blueprint.post('/api/v1/drinks/')
 def post_new_drink():
     """
     Allows the user the add a new drink to the db
@@ -144,7 +144,7 @@ def post_new_drink():
     return response
 
 
-@api_blueprint.get('/api/v1/drink/')
+@api_blueprint.get('/api/v1/drinks/')
 def get_all_drink():
     """
     To get all drinks in the db
@@ -161,7 +161,7 @@ def get_all_drink():
     return response
 
 
-@api_blueprint.get('/api/v1/drink/<alcohol>')
+@api_blueprint.get('/api/v1/drinks/<alcohol>')
 def get_alcohol(alcohol):
     """
     Get data on drinks with given name
